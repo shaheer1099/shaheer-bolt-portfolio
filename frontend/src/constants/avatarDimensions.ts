@@ -49,6 +49,23 @@ export function getAboutAvatarRect(): { left: number; top: number; width: number
   return null;
 }
 
+/** Read the live on-screen box of the Tech Stack center avatar. */
+export function getTechAvatarRect(): { left: number; top: number; width: number; height: number } | null {
+  const ref = document.querySelector<HTMLImageElement>('[data-avatar-tech-img]');
+
+  if (ref && ref.offsetWidth > 0 && ref.offsetHeight > 0) {
+    const rect = ref.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+  }
+
+  return null;
+}
+
 /** Read the live rendered size of the About-section reference image. */
 export function getAboutAvatarSize(): { width: number; height: number } {
   const ref = document.querySelector<HTMLImageElement>('[data-avatar-about-img]');

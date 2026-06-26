@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import HeroAboutSection from './components/HeroAboutSection';
 import Expertise from './components/Expertise';
 import Projects from './components/Projects';
-import Skills from './components/Skills';
 import Process from './components/Process';
 import Marketplaces from './components/Marketplaces';
 import Testimonials from './components/Testimonials';
@@ -18,7 +17,6 @@ function HomePage() {
       <main>
         <HeroAboutSection />
         <Expertise />
-        <Skills />
         <Process />
         <Projects />
         <Marketplaces />

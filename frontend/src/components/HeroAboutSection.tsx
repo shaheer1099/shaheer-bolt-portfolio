@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import Hero from './Hero';
 import About from './About';
+import Skills from './Skills';
 import TravelingAvatar from './TravelingAvatar';
 
 export default function HeroAboutSection() {
@@ -11,6 +12,7 @@ export default function HeroAboutSection() {
       <TravelingAvatar wrapperRef={wrapperRef} />
       <Hero />
       <About />
+      <Skills />
     </div>
   );
 }
