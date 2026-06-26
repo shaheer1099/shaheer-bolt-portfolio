@@ -91,6 +91,13 @@ body {
   .btn-secondary {
     @apply bg-transparent border border-gray-600 hover:border-accent text-white transition-all duration-300 hover:bg-dark-700/60 backdrop-blur-sm hover:-translate-y-0.5;
   }
+
+  /* Keep scaled avatar PNGs sharp on retina displays */
+  .avatar-crisp {
+    image-rendering: auto;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

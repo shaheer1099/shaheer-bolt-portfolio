@@ -3,7 +3,8 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useAnimatedCounter } from '../hooks/useAnimatedCounter';
 import { Calendar, Briefcase, Store, Globe } from 'lucide-react';
 import SectionHeading from './SectionHeading';
-import laptopPose from '../assets/images/avatar-2.png';
+import laptopPose from '../assets/images/avatar3.png';
+import { AVATAR_HEIGHT_CLASS } from '../constants/avatarDimensions';
 
 const stats = [
   { label: 'Years Experience', value: 7, suffix: '+', icon: Calendar },
@@ -35,7 +36,7 @@ export default function About() {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>(0.2);
 
   return (
-    <section id="about" className="relative py-24 px-6 bg-dark-800 overflow-hidden">
+    <section id="about" className="relative py-24 px-6 bg-dark-800 overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           eyebrow="About Me"
@@ -43,7 +44,7 @@ export default function About() {
           description="From Shopify apps to WooCommerce plugins — I help businesses ship products that perform."
         />
 
-        <div ref={ref} className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center">
+        <div ref={ref} className="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-start">
           {/* Text — animates in from the left */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -92,18 +93,17 @@ export default function About() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             viewport={{ once: true }}
             data-avatar-about-stage
-            className="relative min-h-[420px] lg:min-h-[520px] flex items-end justify-center"
+            className="relative flex items-end justify-end w-full min-h-[480px] sm:min-h-[520px] lg:min-h-[620px] overflow-hidden lg:overflow-visible lg:-mr-6 xl:-mr-10"
           >
             {/* Soft platform glow */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-accent/10 blur-3xl" aria-hidden />
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 h-8 w-72 rounded-[100%] bg-black/40 blur-xl" aria-hidden />
+            <div className="absolute bottom-6 right-8 lg:right-4 w-72 h-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" aria-hidden />
+            <div className="absolute bottom-4 right-10 lg:right-6 h-8 w-56 rounded-[100%] bg-black/40 blur-xl pointer-events-none" aria-hidden />
 
-            {/* Static seated pose is the final stopped state. The moving avatar
-                fades into this as About arrives. */}
             <img
+              data-avatar-about-img
               src={laptopPose}
               alt="Shaheer working on a laptop"
-              className="relative z-10 w-[320px] sm:w-[380px] lg:w-[460px] max-w-full object-contain lg:opacity-[var(--about-avatar-opacity,0)]"
+              className={`relative z-10 avatar-crisp ${AVATAR_HEIGHT_CLASS} w-auto max-w-none shrink-0 -translate-x-[6%] lg:-translate-x-[10%] object-contain object-center lg:opacity-[var(--about-avatar-opacity,0)]`}
             />
           </motion.div>
         </div>

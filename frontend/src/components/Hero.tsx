@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronDown, Briefcase } from 'lucide-react';
-import portraitImg from '../assets/images/avatar.png';
+import portraitImg from '../assets/images/avatar1.png';
+import { AVATAR_HEIGHT_CLASS } from '../constants/avatarDimensions';
 
 function InteractiveCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -130,55 +131,38 @@ export default function Hero() {
   const scrollToProjects = () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   const scrollToContact = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-
-  // Parallax: background layers drift at different speeds for depth.
-  const glowOneY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
-  const glowTwoY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
-  const meshY = useTransform(scrollYProgress, [0, 1], ['0%', '60%']);
-  const gridY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden bg-dark-900">
-      {/* Ambient glow — parallax */}
+      {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          style={{ y: glowOneY }}
+        <div
           className="absolute -top-1/4 -left-1/4 w-3/4 h-3/4 rounded-full blur-3xl"
           aria-hidden
         >
           <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0.04) 40%, transparent 70%)' }} />
-        </motion.div>
-        <motion.div
-          style={{ y: glowTwoY }}
+        </div>
+        <div
           className="absolute -bottom-1/4 -right-1/4 w-3/4 h-3/4 rounded-full blur-3xl"
           aria-hidden
         >
           <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)' }} />
-        </motion.div>
-        <motion.div
-          style={{ y: meshY }}
+        </div>
+        <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-30 blur-3xl mesh-gradient"
           aria-hidden
         />
       </div>
 
-      {/* Interactive dot grid — parallax */}
-      <motion.div style={{ y: gridY }} className="absolute inset-0 opacity-80">
+      {/* Interactive dot grid */}
+      <div className="absolute inset-0 opacity-80">
         <InteractiveCanvas />
-      </motion.div>
+      </div>
 
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-2 gap-12 items-center min-h-screen"
+      <div
+        className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-2 gap-12 items-center lg:items-stretch min-h-screen"
       >
         {/* Left — text */}
-        <div className="pointer-events-none lg:max-w-xl">
+        <div className="pointer-events-none lg:max-w-xl lg:self-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -237,7 +221,7 @@ export default function Hero() {
         {/* Desktop stage — the traveling avatar (rendered by HeroAboutSection) occupies this column */}
         <div
           data-avatar-hero-stage
-          className="hidden lg:block relative min-h-[560px]"
+          className="hidden lg:flex relative min-h-[480px] lg:min-h-[640px] lg:h-full items-center justify-center overflow-visible"
           aria-hidden
         />
 
@@ -251,11 +235,11 @@ export default function Hero() {
           <img
             src={portraitImg}
             alt="Shaheer"
-            className="w-[260px] sm:w-[300px] object-contain"
-            style={{ filter: 'drop-shadow(0 20px 60px rgba(59,130,246,0.25))' }}
+            decoding="async"
+            className={`avatar-crisp ${AVATAR_HEIGHT_CLASS} w-auto max-w-none object-contain object-center`}
           />
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Scroll cue */}
       <motion.div

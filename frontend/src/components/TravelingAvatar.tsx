@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { RefObject } from 'react';
-import standingPose from '../assets/images/avatar.png';
-import laptopPose from '../assets/images/avatar-2.png';
+import standingPose from '../assets/images/avatar1.png';
+import laptopPose from '../assets/images/avatar3.png';
+import { getAboutAvatarRect, getAboutAvatarSize } from '../constants/avatarDimensions';
 
 interface TravelingAvatarProps {
   wrapperRef: RefObject<HTMLElement | null>;
@@ -19,7 +20,7 @@ interface TravelingAvatarProps {
 export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [box, setBox] = useState({ left: 0, top: 0, width: 430, height: 560 });
+  const [box, setBox] = useState({ left: 0, top: 0, width: 460, height: 307 });
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -57,22 +58,20 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       if (heroStage && aboutStage) {
         const heroRect = heroStage.getBoundingClientRect();
         const aboutRect = aboutStage.getBoundingClientRect();
-        const desktopWidth = window.innerWidth >= 1280 ? 470 : 430;
-        const desktopHeight = 560;
-        const finalWidth = window.innerWidth >= 1280 ? 460 : 430;
-        const finalHeight = 360;
+        const { width: avatarWidth, height: avatarHeight } = getAboutAvatarSize();
+        const aboutImgRect = getAboutAvatarRect();
 
         const startBox = {
-          left: heroRect.left + heroRect.width / 2 - desktopWidth / 2,
-          top: heroRect.top + heroRect.height - desktopHeight - 20,
-          width: desktopWidth,
-          height: desktopHeight,
+          left: heroRect.left + heroRect.width / 2 - avatarWidth / 2,
+          top: heroRect.top + (heroRect.height - avatarHeight) / 2,
+          width: avatarWidth,
+          height: avatarHeight,
         };
-        const endBox = {
-          left: aboutRect.left + aboutRect.width / 2 - finalWidth / 2,
-          top: aboutRect.top + aboutRect.height - finalHeight - 40,
-          width: finalWidth,
-          height: finalHeight,
+        const endBox = aboutImgRect ?? {
+          left: aboutRect.left + aboutRect.width / 2 - avatarWidth / 2,
+          top: aboutRect.top + (aboutRect.height - avatarHeight) / 2,
+          width: avatarWidth,
+          height: avatarHeight,
         };
 
         setBox({
@@ -110,8 +109,6 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
   const fade = (from: number, to: number) => clamp((progress - from) / (to - from));
   const standingOpacity = progress <= 0.985 ? 1 - fade(0.12, 0.45) : 0;
   const sittingOpacity = progress <= 0.985 ? fade(0.28, 0.65) : 0;
-  const badgeOpacity = 1 - fade(0.12, 0.42);
-  const glowOpacity = 1 - progress * 0.25;
   const layerOpacity = progress < 0.985 ? 1 : 0;
 
   if (reducedMotion) {
@@ -130,8 +127,8 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
             <img
               src={laptopPose}
               alt="Shaheer"
-              className="h-full w-full object-contain object-bottom"
-              style={{ filter: 'drop-shadow(0 20px 60px rgba(59,130,246,0.25))' }}
+              decoding="async"
+              className="avatar-crisp h-full w-full object-contain object-center"
             />
           </div>
         </div>
@@ -154,28 +151,15 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
             height: box.height,
           }}
         >
-          {/* Ambient glow */}
-          <motion.div
-            style={{ opacity: glowOpacity }}
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 h-[75%] w-[75%] rounded-full blur-3xl"
-            aria-hidden
-          >
-            <div
-              className="w-full h-full rounded-full"
-              style={{
-                background:
-                  'radial-gradient(circle, rgba(59,130,246,0.22) 0%, rgba(6,182,212,0.10) 50%, transparent 75%)',
-              }}
-            />
-          </motion.div>
-
           {/* Standing pose */}
           <motion.img
             src={standingPose}
             alt="Shaheer"
+            decoding="async"
+            fetchPriority="high"
             style={{ opacity: standingOpacity }}
-            className="absolute inset-0 h-full w-full object-contain object-bottom"
-            animate={{ y: [0, -10, 0] }}
+            className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
+            animate={{ y: [0, -8, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           />
 
@@ -183,30 +167,11 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
           <motion.img
             src={laptopPose}
             alt="Shaheer working on a laptop"
+            decoding="async"
             style={{ opacity: sittingOpacity }}
-            className="absolute inset-0 h-full w-full object-contain object-bottom"
+            className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
           />
 
-          {/* Floating badges (fade out during the morph) */}
-          <motion.div
-            style={{ opacity: badgeOpacity }}
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-            className="absolute top-[18%] left-[8%] z-20 px-3 py-2 rounded-xl glass shadow-xl"
-          >
-            <p className="text-xs text-gray-400">Experience</p>
-            <p className="text-base font-bold text-white">7+ Years</p>
-          </motion.div>
-
-          <motion.div
-            style={{ opacity: badgeOpacity }}
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-            className="absolute top-[28%] right-[6%] z-20 px-3 py-2 rounded-xl glass border-accent/30 shadow-xl"
-          >
-            <p className="text-xs text-gray-400">Published</p>
-            <p className="text-base font-bold gradient-text">5 Products</p>
-          </motion.div>
         </motion.div>
       </div>
     </motion.div>
