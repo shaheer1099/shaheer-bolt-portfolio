@@ -1,0 +1,340 @@
+export interface Project {
+    id: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    category: string;
+    technology: string;
+    service: string;
+    url: string;
+    gradient: string;
+    accentColor: string;
+    stats: { label: string; value: string }[];
+    solutions: { num: string; title: string; desc: string }[];
+    features: string[];
+    pdfFile: string;
+    tags: string[];
+    previewColor: string;
+    tab: 'shopify' | 'wordpress' | 'saas';
+  }
+  
+  export const projects: Project[] = [
+    // ── Shopify ────────────────────────────────────────────────────
+    {
+      id: 'noon-reviews-importer',
+      title: 'Noon Reviews Importer',
+      subtitle: 'Shopify Public App',
+      description:
+        'The Noon Reviews Importer is a Shopify application that allows merchants to import authentic product reviews directly from Noon into their Shopify store. The app helps store owners leverage real customer feedback from Noon product pages and display it on their Shopify storefront to increase buyer trust and improve conversions.',
+      category: 'Shopify App',
+      technology: 'Shopify Public App',
+      service: 'Shopify',
+      url: 'https://apps.shopify.com',
+      gradient: 'from-yellow-500 via-amber-500 to-orange-500',
+      accentColor: 'text-yellow-400',
+      previewColor: '#f59e0b',
+      stats: [
+        { value: '<30s', label: 'Average Import Time' },
+        { value: '01', label: 'Click Import' },
+        { value: '10K+', label: 'Reviews Imported' },
+        { value: '100%', label: 'Authentic Reviews' },
+      ],
+      solutions: [
+        { num: '01', title: 'Smart Review Import System', desc: 'A streamlined system that fetches customer reviews from Noon product pages using the product URL and processes them for Shopify compatibility.' },
+        { num: '02', title: 'Automated Review Synchronization', desc: 'The app automatically imports review data including ratings, reviewer names, and review content to ensure accurate and structured review records.' },
+        { num: '03', title: 'Flexible Storefront Display', desc: 'Multiple layout options allow merchants to showcase imported reviews directly on Shopify product pages to improve trust and engagement.' },
+        { num: '04', title: 'Review Management & Export', desc: 'Merchants can manage imported reviews and export them to CSV for reporting, backups, or further analysis.' },
+      ],
+      features: [
+        'One-click Noon review import',
+        'Automatic rating & content sync',
+        'Multiple storefront display layouts',
+        'CSV export for review data',
+        'Shopify-compatible review format',
+        'Bulk import support',
+        'Reviewer name & date preservation',
+        'Merchant dashboard management',
+      ],
+      pdfFile: 'Shopify/Noon-review-app.pdf',
+      tags: ['Shopify', 'Node.js', 'React'],
+      tab: 'shopify',
+    },
+    {
+      id: 'my-outfit-builder',
+      title: 'My Outfit Builder',
+      subtitle: 'Shopify Public App',
+      description:
+        'Outfit Builder is a Shopify app that allows merchants to create interactive outfit-building experiences directly on their store. Customers can mix and match products to visualize complete looks. The app helps brands showcase collections in a more engaging way, allowing shoppers to explore multiple items together and discover styling combinations. Designed for fashion stores, Outfit Builder increases product discovery, improves customer engagement, and encourages customers to purchase complete outfits instead of single items.',
+      category: 'Shopify App',
+      technology: 'Shopify Public App',
+      service: 'Shopify',
+      url: 'https://apps.shopify.com/outfit-builder',
+      gradient: 'from-lime-500 via-green-500 to-emerald-600',
+      accentColor: 'text-lime-400',
+      previewColor: '#84cc16',
+      stats: [
+        { value: 'Live', label: 'On Shopify App Store' },
+        { value: 'Drag', label: '& Drop Outfit Building' },
+        { value: 'Multi', label: 'Product Bundle Creation' },
+        { value: 'Real', label: 'Time Inventory Sync' },
+      ],
+      solutions: [
+        { num: '01', title: 'Outfit & Bundle Creation', desc: 'Allows merchants to create complete outfits by combining multiple products into a single, shoppable set with flexible pricing rules.' },
+        { num: '02', title: 'Variant & Inventory Sync', desc: 'Automatically syncs product variants and inventory in real time to ensure accurate availability across bundled items.' },
+        { num: '03', title: 'Seamless Storefront Experience', desc: 'Displays outfits directly on product and collection pages with a clean, conversion-focused UI that blends into the theme.' },
+        { num: '04', title: 'Revenue Optimization', desc: 'Boosts AOV by encouraging cross-selling and upselling through curated looks without disrupting the checkout flow.' },
+      ],
+      features: [
+        'Drag-and-drop outfit builder',
+        'Multi-product bundle creation',
+        'Real-time variant & inventory sync',
+        'Storefront collection display',
+        'Cross-sell & upsell optimization',
+        'Theme-compatible UI blocks',
+        'Shopify App Store public listing',
+        'Analytics & performance tracking',
+      ],
+      pdfFile: 'Shopify/outfitbuilder.pdf',
+      tags: ['Shopify', 'Node.js', 'React'],
+      tab: 'shopify',
+    },
+    {
+      id: 'peakflow-progress-tracker',
+      title: 'PeakFlow Progress Tracker',
+      subtitle: 'Shopify Public App',
+      description:
+        'PeakFlow is a Shopify public app built to help merchants track progress, performance, and growth without relying on spreadsheets or scattered tools. It centralizes store analytics, advertising metrics, fulfillment data, and revenue insights into one clear dashboard making it easier for teams to monitor goals, collaborate efficiently, and make data-driven decisions in real time. Designed for scalability, PeakFlow supports role-based access for merchants, teams, and coaches while keeping reporting transparent, automated, and always up to date.',
+      category: 'Shopify App',
+      technology: 'Shopify Public App',
+      service: 'Shopify',
+      url: 'https://apps.shopify.com/peakflow-progress-tracker',
+      gradient: 'from-cyan-500 via-teal-500 to-blue-600',
+      accentColor: 'text-cyan-400',
+      previewColor: '#06b6d4',
+      stats: [
+        { value: '04+', label: 'Core Metrics Categories Tracked' },
+        { value: '100%', label: 'Real-Time Data Visibility' },
+        { value: '00', label: 'Manual Spreadsheets Required' },
+        { value: 'Role', label: 'Based Access Control' },
+      ],
+      solutions: [
+        { num: '01', title: 'Analytics & Tracking', desc: 'Unified store analytics, ad metrics, fulfillment, and revenue tracking in one centralized system.' },
+        { num: '02', title: 'Access Management', desc: 'Role-based access for admins, clients, and coaches with full control and data security.' },
+        { num: '03', title: 'Reporting & Dashboards', desc: 'Transparent reporting with centralized dashboards for real-time business visibility.' },
+        { num: '04', title: 'Automation', desc: 'Eliminate spreadsheets with automated, real-time data syncing and insights.' },
+      ],
+      features: [
+        'Centralized performance dashboard',
+        'Store analytics & revenue tracking',
+        'Advertising metrics integration',
+        'Role-based access (admin/coach/client)',
+        'Automated reporting & PDF export',
+        'Real-time data sync',
+        'Goal tracking & progress monitoring',
+        'Shopify App Store public listing',
+      ],
+      pdfFile: 'Shopify/Peakflow.pdf',
+      tags: ['Shopify', 'Node.js', 'React'],
+      tab: 'shopify',
+    },
+  
+    // ── WordPress / WooCommerce ─────────────────────────────────────
+    {
+      id: 'extend-b2b-aio',
+      title: 'Extend B2B – Ecommerce AIO',
+      subtitle: 'WooCommerce Wholesale Plugin',
+      description:
+        'Comprehensive B2B ecommerce solution for WooCommerce with advanced pricing, roles, and business workflows. Extend B2B – Ecommerce AIO is a powerful WooCommerce extension designed to transform standard online stores into fully-featured B2B and wholesale ecommerce platforms. It centralizes wholesale pricing, customer-specific rules, catalog visibility, and ordering workflows into one streamlined system.',
+      category: 'WooCommerce Plugin',
+      technology: 'Product Development',
+      service: 'WooCommerce',
+      url: 'https://woocommerce.com/products/b2b-ecommerce-for-woocommerce/',
+      gradient: 'from-amber-600 via-orange-600 to-yellow-700',
+      accentColor: 'text-amber-400',
+      previewColor: '#d97706',
+      stats: [
+        { value: '15+', label: 'B2B & Wholesale Features Enabled' },
+        { value: '100%', label: 'Automated B2B Workflows' },
+        { value: '50K+', label: 'Products Supported per Store' },
+        { value: '3x', label: 'Faster Wholesale Order Flow' },
+      ],
+      solutions: [
+        { num: '01', title: 'Custom B2B Architecture', desc: 'Designed and implemented a modular B2B system on top of WooCommerce, enabling role-based pricing, catalog visibility, and purchasing logic without affecting core performance.' },
+        { num: '02', title: 'Dynamic Pricing Engine', desc: 'Developed a flexible pricing engine supporting customer-specific pricing, quantity-based discounts, and conditional rules applied consistently across product, cart, and checkout.' },
+        { num: '03', title: 'Role-Based Access & Visibility', desc: 'Implemented granular access control to manage product visibility, pricing display, and purchasing permissions for B2B, wholesale, and retail users.' },
+        { num: '04', title: 'Automated Wholesale Workflows', desc: 'Automated bulk ordering, minimum order rules, and quote request flows to eliminate manual intervention and reduce operational complexity.' },
+      ],
+      features: [
+        'Role-based pricing & catalog visibility',
+        'Quote request & approval workflows',
+        'Minimum order volume (MOV) rules',
+        'Bulk ordering interface',
+        'Customer-specific price lists',
+        'B2B & B2C dual mode',
+        'Payment & shipping restrictions',
+        'Wholesale account registration',
+      ],
+      pdfFile: 'Extend_B2B_Ecommerce_AIO_–_WooCommerce_Wholesale_Plugin.pdf',
+      tags: ['WordPress', 'WooCommerce', 'PHP'],
+      tab: 'wordpress',
+    },
+    {
+      id: 'extend-b2b-product-tables',
+      title: 'Extend B2B – Product Tables',
+      subtitle: 'For WooCommerce',
+      description:
+        'Product table solution for WooCommerce that enables fast bulk ordering and improved UX for wholesale and B2B customers. The plugin transforms the default WooCommerce shop layout into a structured, table-based product view, allowing customers to search, filter, sort, and add products to the cart quickly from a single interface.',
+      category: 'WooCommerce Plugin',
+      technology: 'Product Development',
+      service: 'WooCommerce',
+      url: 'https://woocommerce.com/products/product-tables-for-woocommerce/',
+      gradient: 'from-teal-600 via-emerald-600 to-green-700',
+      accentColor: 'text-teal-400',
+      previewColor: '#0d9488',
+      stats: [
+        { value: '50+', label: 'Display & Layout Configurations' },
+        { value: '100%', label: 'WooCommerce Core Compatible' },
+        { value: 'Bulk', label: 'Add-to-Cart Ordering Flow' },
+        { value: 'Large', label: 'Catalogs Supported Smoothly' },
+      ],
+      solutions: [
+        { num: '01', title: 'One-Click & Bulk Ordering', desc: 'Built to enable fast purchasing workflows, allowing customers to add multiple products to the cart efficiently from a single interface.' },
+        { num: '02', title: 'Custom Product Data Display', desc: 'Gives merchants full control over which product information is shown in the table, keeping the interface clear and relevant.' },
+        { num: '03', title: 'Variation Attribute Filtering', desc: 'Allows customers to filter products based on variation attributes, making it easier to find the exact product configuration.' },
+        { num: '04', title: 'Smart Variation Handling', desc: 'Intelligently manages product variations to ensure accurate pricing, availability, and add-to-cart behavior.' },
+      ],
+      features: [
+        'Table-based product listings',
+        'Quick add-to-cart & bulk purchases',
+        'Product search & filtering',
+        'Variation attribute display',
+        'Alphabetical & price sorting',
+        'Gutenberg block support',
+        'Shortcode integration',
+        'Performance-optimized queries',
+      ],
+      pdfFile: 'Extend_B2B_–_Product_Tables_for_WooCommerce.pdf',
+      tags: ['WordPress', 'WooCommerce', 'PHP'],
+      tab: 'wordpress',
+    },
+    {
+      id: 'extend-booking-filters',
+      title: 'Extend – Booking Filters',
+      subtitle: 'For WooCommerce',
+      description:
+        'Advanced filtering solution for WooCommerce Bookings, improving discoverability and booking UX. A premium WooCommerce extension that enhances the WooCommerce Bookings experience by adding powerful filtering and search capabilities to your booking catalog. Helps customers find available bookable products faster by letting them filter listings using criteria like dates, times, price ranges, categories, tags, attributes, and ratings.',
+      category: 'WooCommerce Plugin',
+      technology: 'Product Development',
+      service: 'WooCommerce',
+      url: 'https://woocommerce.com/products/booking-filters-for-woocommerce/',
+      gradient: 'from-sky-600 via-cyan-600 to-blue-700',
+      accentColor: 'text-sky-400',
+      previewColor: '#0284c7',
+      stats: [
+        { value: '15+', label: 'Filtering Criteria (Date, Time, Price, Tags)' },
+        { value: '100%', label: 'WooCommerce Safe' },
+        { value: 'No', label: 'Core Modifications and Setup Complexity' },
+        { value: 'Instant', label: 'Filtered Results and Live Booking' },
+      ],
+      solutions: [
+        { num: '01', title: 'Advanced Booking Filters', desc: 'Designed and implemented flexible filtering for bookable products, enabling users to search by availability, price, categories, attributes, and keywords.' },
+        { num: '02', title: 'Seamless Booking Integration', desc: 'Built the solution as a native extension for WooCommerce Bookings, ensuring accurate availability handling and full compatibility with existing booking rules.' },
+        { num: '03', title: 'Block & Shortcode Support', desc: 'Enabled filters to be placed anywhere on the site using Gutenberg blocks and shortcodes, giving merchants full layout and UX control.' },
+        { num: '04', title: 'Performance-Focused Architecture', desc: 'Optimized query handling and filtering logic to support large booking catalogs without impacting page load or booking performance.' },
+      ],
+      features: [
+        'Date & time range filtering',
+        'Price range slider',
+        'Category & tag filters',
+        'Rating-based filtering',
+        'Keyword search',
+        'Gutenberg block integration',
+        'Shortcode support',
+        'Zero core file modification',
+      ],
+      pdfFile: 'Extend_–_Booking_Filters_for_WooCommerce.pdf',
+      tags: ['WordPress', 'WooCommerce', 'PHP'],
+      tab: 'wordpress',
+    },
+    {
+      id: 'extend-subscriptions',
+      title: 'Extend – Subscriptions Add-On',
+      subtitle: 'For WooCommerce',
+      description:
+        'Extension that enhances WooCommerce Subscriptions with additional business logic and customization options. Enables merchants to offer flexible subscription models such as weekly, monthly, or yearly billing, while giving customers full control over their subscriptions including renewals, upgrades, downgrades, pauses, and cancellations.',
+      category: 'WooCommerce Plugin',
+      technology: 'Product Development',
+      service: 'WooCommerce',
+      url: 'https://woocommerce.com/products/subscriptions-add-on-for-woocommerce/',
+      gradient: 'from-rose-600 via-pink-600 to-red-700',
+      accentColor: 'text-rose-400',
+      previewColor: '#e11d48',
+      stats: [
+        { value: '01', label: 'Centralized Subscription Engine' },
+        { value: 'Clean', label: 'Order History Tracking' },
+        { value: 'Easy', label: 'Store Owner Management' },
+        { value: 'Secure', label: 'Recurring Payment Handling' },
+      ],
+      solutions: [
+        { num: '01', title: 'Subscription Engine Architecture', desc: 'Designed and implemented a centralized subscription engine to manage recurring orders, billing schedules, and subscription states with accuracy and consistency.' },
+        { num: '02', title: 'Automated Billing & Renewals', desc: 'Built automated renewal workflows to generate orders, process payments, and update subscription statuses without manual intervention.' },
+        { num: '03', title: 'Customer Subscription Management', desc: 'Enabled customer self-service features such as upgrades, downgrades, pauses, and cancellations, improving user experience and reducing support overhead.' },
+        { num: '04', title: 'Payment & Lifecycle Reliability', desc: 'Implemented secure payment handling, retry logic, and lifecycle automation to ensure stable recurring transactions and predictable revenue flow.' },
+      ],
+      features: [
+        'Weekly, monthly, yearly billing cycles',
+        'Automated renewal processing',
+        'Customer upgrade & downgrade',
+        'Subscription pause & cancel',
+        'Payment retry logic',
+        'Centralized subscription dashboard',
+        'WooCommerce gateway compatible',
+        'Clean order history tracking',
+      ],
+      pdfFile: 'Extend_–_Subscriptions_Add-On_for_WooCommerce.pdf',
+      tags: ['WordPress', 'WooCommerce', 'PHP'],
+      tab: 'wordpress',
+    },
+  
+    // ── SaaS & Apps ────────────────────────────────────────────────
+    {
+      id: 'cyberize-it',
+      title: 'Cyberize It',
+      subtitle: 'Online Notarization Platform',
+      description:
+        'Cyberize It is a state-of-the-art, online notarization platform that connects consumers and notaries together. A platform where people can seamlessly and digitally get their papers signed and sealed by a notary while also enabling notaries to provide their services in exchange for a fee. Built for scalability and compliance, combining identity verification, document security, real-time video sessions, and audit-ready records into one seamless platform.',
+      category: 'Product Development',
+      technology: 'MEAN / MERN',
+      service: 'Product Development',
+      url: 'https://app.cyberizeit.com/#/auth/login',
+      gradient: 'from-blue-600 via-blue-700 to-sky-800',
+      accentColor: 'text-blue-400',
+      previewColor: '#1d4ed8',
+      stats: [
+        { value: '24/7', label: 'Remote Online Notarization Availability' },
+        { value: '100%', label: 'Legally Compliant & Secure Sessions' },
+        { value: 'Live', label: 'Video-Based Notarization Sessions' },
+        { value: 'Role', label: 'Notary, Client & Admin Access Control' },
+      ],
+      solutions: [
+        { num: '01', title: 'Backend & Core Architecture', desc: 'Built on Node.js (Express) with a MySQL database to ensure scalable, secure, and high-performance notarization workflows.' },
+        { num: '02', title: 'Integrations & Payments', desc: 'Integrated Zoom, AdobeSign, Idology (KBA), and Stripe Connect to enable video notarization, e-signatures, identity checks, and real-time split payments.' },
+        { num: '03', title: 'User Roles & Workflow Digitization', desc: 'Implemented Admin, Customer, and Notary roles with fully digitized notarization journeys designed through detailed workflow mapping.' },
+        { num: '04', title: 'Advanced Features & Modules', desc: 'Added professional notary accounts, biometric ID verification, and a job board for notarization and witness assignments.' },
+      ],
+      features: [
+        'Multi-role access (Admin, Customer, Notary)',
+        'Live video notarization via Zoom',
+        'AdobeSign e-signature integration',
+        'Biometric identity verification (KBA)',
+        'Stripe Connect split payments',
+        'Audit-ready session records',
+        'Job board for notary assignments',
+        'Document upload & seal tracking',
+      ],
+      pdfFile: 'Cyberize_it.pdf',
+      tags: ['MEAN Stack', 'Node.js', 'React'],
+      tab: 'saas',
+    },
+  ];
+  
