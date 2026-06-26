@@ -1,36 +1,28 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useLayoutEffect, useState } from 'react';
 import type { RefObject } from 'react';
 import standingPose from '../assets/images/avatar1.png';
 import laptopPose from '../assets/images/avatar3.png';
-import { getAboutAvatarRect, getAboutAvatarSize } from '../constants/avatarDimensions';
+import { getAboutAvatarRect, getHeroAvatarRect } from '../constants/avatarDimensions';
 
 interface TravelingAvatarProps {
   wrapperRef: RefObject<HTMLElement | null>;
 }
 
+type AvatarBox = { left: number; top: number; width: number; height: number };
+
+const FALLBACK_BOX: AvatarBox = { left: 0, top: 0, width: 460, height: 307 };
+
 /**
- * A single developer avatar that starts standing in the Hero and, as the user
- * scrolls through the Hero -> About range, drifts down the right column while
- * smoothly crossfading into a seated "working on laptop" posture. Rendered as a
- * viewport-fixed overlay (immune to ancestor `overflow` clipping that breaks
- * `position: sticky`), driven entirely by the wrapper's scroll progress. The
- * whole layer fades out once About has been read, so it never trails the page.
+ * Scroll-driven avatar overlay. A hidden Hero `<img>` provides the layout box;
+ * this layer is always mounted and pinned to that box until scroll moves it.
  */
 export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [box, setBox] = useState({ left: 0, top: 0, width: 460, height: 307 });
+  const [box, setBox] = useState<AvatarBox>(() =>
+    typeof window !== 'undefined' ? getHeroAvatarRect() ?? FALLBACK_BOX : FALLBACK_BOX,
+  );
 
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReducedMotion(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0;
 
     const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -39,53 +31,33 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
     const update = () => {
       const wrapper = wrapperRef.current;
       const about = document.getElementById('about');
-      const heroStage = document.querySelector<HTMLElement>('[data-avatar-hero-stage]');
-      const aboutStage = document.querySelector<HTMLElement>('[data-avatar-about-stage]');
       if (!wrapper || !about) return;
 
       const scrollY = window.scrollY || window.pageYOffset;
       const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
       const aboutTop = about.getBoundingClientRect().top + scrollY;
 
-      // Start immediately in Hero and complete the morph as About reaches the
-      // upper-middle of the viewport. This makes the transition visible and
-      // deterministic instead of depending on Framer's target offset heuristics.
       const start = wrapperTop;
       const end = Math.max(start + 1, aboutTop - window.innerHeight * 0.28);
       const nextProgress = clamp((scrollY - start) / (end - start));
       setProgress(nextProgress);
 
-      if (heroStage && aboutStage) {
-        const heroRect = heroStage.getBoundingClientRect();
-        const aboutRect = aboutStage.getBoundingClientRect();
-        const { width: avatarWidth, height: avatarHeight } = getAboutAvatarSize();
-        const aboutImgRect = getAboutAvatarRect();
-
-        const startBox = {
-          left: heroRect.left + heroRect.width / 2 - avatarWidth / 2,
-          top: heroRect.top + (heroRect.height - avatarHeight) / 2,
-          width: avatarWidth,
-          height: avatarHeight,
-        };
-        const endBox = aboutImgRect ?? {
-          left: aboutRect.left + aboutRect.width / 2 - avatarWidth / 2,
-          top: aboutRect.top + (aboutRect.height - avatarHeight) / 2,
-          width: avatarWidth,
-          height: avatarHeight,
-        };
-
-        setBox({
-          left: lerp(startBox.left, endBox.left, nextProgress),
-          top: lerp(startBox.top, endBox.top, nextProgress),
-          width: lerp(startBox.width, endBox.width, nextProgress),
-          height: lerp(startBox.height, endBox.height, nextProgress),
-        });
-      }
-
       document.documentElement.style.setProperty(
         '--about-avatar-opacity',
         nextProgress >= 0.985 ? '1' : '0',
       );
+
+      const heroImgRect = getHeroAvatarRect();
+      const aboutImgRect = getAboutAvatarRect();
+      const startBox = heroImgRect ?? FALLBACK_BOX;
+      const endBox = aboutImgRect ?? startBox;
+
+      setBox({
+        left: lerp(startBox.left, endBox.left, nextProgress),
+        top: lerp(startBox.top, endBox.top, nextProgress),
+        width: lerp(startBox.width, endBox.width, nextProgress),
+        height: lerp(startBox.height, endBox.height, nextProgress),
+      });
     };
 
     const onScroll = () => {
@@ -111,69 +83,38 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
   const sittingOpacity = progress <= 0.985 ? fade(0.28, 0.65) : 0;
   const layerOpacity = progress < 0.985 ? 1 : 0;
 
-  if (reducedMotion) {
-    return (
-      <div className="hidden lg:block fixed inset-0 pointer-events-none z-30">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-screen relative">
-          <div
-            className="fixed"
-            style={{
-              left: box.left,
-              top: box.top,
-              width: box.width,
-              height: box.height,
-            }}
-          >
-            <img
-              src={laptopPose}
-              alt="Shaheer"
-              decoding="async"
-              className="avatar-crisp h-full w-full object-contain object-center"
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
+    <div
       style={{ opacity: layerOpacity }}
       className="hidden lg:block fixed inset-0 pointer-events-none z-30"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 h-screen relative">
-        <motion.div
-          className="fixed"
-          style={{
-            left: box.left,
-            top: box.top,
-            width: box.width,
-            height: box.height,
-          }}
-        >
-          {/* Standing pose */}
-          <motion.img
-            src={standingPose}
-            alt="Shaheer"
-            decoding="async"
-            fetchPriority="high"
-            style={{ opacity: standingOpacity }}
-            className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          />
+      <div
+        className="fixed will-change-[left,top,width,height]"
+        style={{
+          left: box.left,
+          top: box.top,
+          width: box.width,
+          height: box.height,
+        }}
+      >
+        <img
+          src={standingPose}
+          alt="Shaheer"
+          decoding="async"
+          fetchPriority="high"
+          style={{ opacity: standingOpacity }}
+          className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
+        />
 
-          {/* Seated working pose */}
-          <motion.img
-            src={laptopPose}
-            alt="Shaheer working on a laptop"
-            decoding="async"
-            style={{ opacity: sittingOpacity }}
-            className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
-          />
-
-        </motion.div>
+        <img
+          src={laptopPose}
+          alt=""
+          aria-hidden
+          decoding="async"
+          style={{ opacity: sittingOpacity }}
+          className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
+        />
       </div>
-    </motion.div>
+    </div>
   );
 }

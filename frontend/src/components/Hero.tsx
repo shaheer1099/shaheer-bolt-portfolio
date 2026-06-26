@@ -218,12 +218,21 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Desktop stage — the traveling avatar (rendered by HeroAboutSection) occupies this column */}
+        {/* Desktop stage — invisible measure target; TravelingAvatar renders the visible portrait */}
         <div
           data-avatar-hero-stage
           className="hidden lg:flex relative min-h-[480px] lg:min-h-[640px] lg:h-full items-center justify-center overflow-visible"
           aria-hidden
-        />
+        >
+          <img
+            data-avatar-hero-img
+            src={portraitImg}
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+            className={`avatar-crisp ${AVATAR_HEIGHT_CLASS} w-auto max-w-none object-contain object-center invisible`}
+          />
+        </div>
 
         {/* Mobile portrait fallback */}
         <motion.div

@@ -15,6 +15,23 @@ export function getAvatarDisplayHeight(viewportWidth = window.innerWidth, viewpo
   return Math.min(Math.round(viewportHeight * 0.4), 380);
 }
 
+/** Read the live on-screen box of the Hero-section static reference image. */
+export function getHeroAvatarRect(): { left: number; top: number; width: number; height: number } | null {
+  const ref = document.querySelector<HTMLImageElement>('[data-avatar-hero-img]');
+
+  if (ref && ref.offsetWidth > 0 && ref.offsetHeight > 0) {
+    const rect = ref.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+  }
+
+  return null;
+}
+
 /** Read the live on-screen box of the About-section reference image. */
 export function getAboutAvatarRect(): { left: number; top: number; width: number; height: number } | null {
   const ref = document.querySelector<HTMLImageElement>('[data-avatar-about-img]');
