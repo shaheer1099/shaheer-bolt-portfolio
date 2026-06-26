@@ -16,7 +16,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-8 px-6 bg-dark-900 border-t border-dark-700">
+    <footer className="py-10 px-6 bg-dark-900 border-t border-dark-500/50">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
@@ -52,7 +52,7 @@ export default function Footer() {
           </motion.span>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-dark-700 text-center">
+        <div className="mt-8 pt-6 border-t border-dark-500/50 text-center">
           <p className="text-gray-500 text-sm">
             {new Date().getFullYear()} Shaheer. All rights reserved.
           </p>

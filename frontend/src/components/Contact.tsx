@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Linkedin, Github, Send, ExternalLink } from 'lucide-react';
+import SectionHeading from './SectionHeading';
 
 const projectTypes = [
   'Shopify App',
@@ -30,22 +31,17 @@ export default function Contact() {
   return (
     <section id="contact" className="py-24 px-6 bg-dark-800">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get In Touch</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-accent to-cyan mx-auto rounded-full" />
-        </motion.div>
+        <SectionHeading
+          eyebrow="Contact"
+          title="Get In Touch"
+          description="Have a project in mind? Let's discuss how I can help bring your ecommerce vision to life."
+        />
 
         <div className="grid lg:grid-cols-5 gap-12">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: true }}
             className="lg:col-span-2"
           >
@@ -71,23 +67,23 @@ export default function Contact() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-dark-700 text-gray-400 hover:text-accent hover:bg-dark-600 transition-all"
+                className="p-3 rounded-xl glass hover:border-accent/30 hover:-translate-y-0.5 transition-all"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="w-5 h-5 text-gray-400" />
               </a>
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-dark-700 text-gray-400 hover:text-accent hover:bg-dark-600 transition-all"
+                className="p-3 rounded-xl glass hover:border-accent/30 hover:-translate-y-0.5 transition-all"
               >
-                <Github className="w-5 h-5" />
+                <Github className="w-5 h-5 text-gray-400" />
               </a>
               <a
                 href="https://upwork.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-dark-700 text-gray-400 hover:text-green-400 hover:bg-dark-600 transition-all flex items-center gap-2 text-sm"
+                className="p-3 rounded-xl glass hover:border-green-400/30 hover:-translate-y-0.5 transition-all flex items-center gap-2 text-sm text-gray-400"
               >
                 Upwork
                 <ExternalLink className="w-4 h-4" />
@@ -96,7 +92,7 @@ export default function Contact() {
                 href="https://fiverr.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-dark-700 text-gray-400 hover:text-green-400 hover:bg-dark-600 transition-all flex items-center gap-2 text-sm"
+                className="p-3 rounded-xl glass hover:border-green-400/30 hover:-translate-y-0.5 transition-all flex items-center gap-2 text-sm text-gray-400"
               >
                 Fiverr
                 <ExternalLink className="w-4 h-4" />
@@ -107,11 +103,11 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             viewport={{ once: true }}
             className="lg:col-span-3"
           >
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5 p-8 rounded-2xl glass-card">
               <div className="grid md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
@@ -120,7 +116,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-dark-900 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 transition-colors"
                     placeholder="Your name"
                   />
                 </div>
@@ -131,7 +127,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="w-full px-4 py-3 rounded-lg bg-dark-900 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 transition-colors"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -143,15 +139,11 @@ export default function Contact() {
                   value={formData.projectType}
                   onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-dark-900 border border-dark-600 text-white focus:border-accent focus:outline-none transition-colors appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-dark-600 text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 transition-colors appearance-none cursor-pointer"
                 >
-                  <option value="" className="text-gray-500">
-                    Select project type
-                  </option>
+                  <option value="" className="text-gray-500">Select project type</option>
                   {projectTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
+                    <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
               </div>
@@ -163,7 +155,7 @@ export default function Contact() {
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 rounded-lg bg-dark-900 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-dark-600 text-white placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 transition-colors resize-none"
                   placeholder="Tell me about your project..."
                 />
               </div>
@@ -171,7 +163,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full md:w-auto px-8 py-4 bg-accent hover:bg-accent-light text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full md:w-auto px-8 py-4 btn-primary font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span>Sending...</span>

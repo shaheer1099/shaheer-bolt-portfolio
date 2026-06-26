@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Code2, Server, Database, ShoppingCart, Zap, CreditCard, GitBranch, Layers } from 'lucide-react';
+import SectionHeading from './SectionHeading';
 
 const categories = [
   {
@@ -80,40 +81,37 @@ export default function Skills() {
   return (
     <section className="py-24 px-6 bg-dark-900">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-3 block">
-            Technologies
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Tech Stack</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-accent to-cyan mx-auto rounded-full mb-4" />
-          <p className="text-gray-400 max-w-xl mx-auto text-sm">
-            A modern, full-stack toolkit built for shipping production-grade ecommerce and SaaS products.
-          </p>
-        </motion.div>
+        <SectionHeading
+          eyebrow="Technologies"
+          title="Tech Stack"
+          description="A modern, full-stack toolkit built for shipping production-grade ecommerce and SaaS products."
+        />
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {categories.map((cat, i) => (
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.07 } },
+          }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
+          {categories.map((cat) => (
             <motion.div
               key={cat.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.07 }}
-              viewport={{ once: true }}
-              className={`group relative p-5 rounded-2xl bg-dark-800 border border-dark-500 hover:border-dark-400 transition-all duration-300 ${
+              variants={{
+                hidden: { opacity: 0, y: 24, scale: 0.97 },
+                visible: { opacity: 1, y: 0, scale: 1 },
+              }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className={`group relative p-5 rounded-2xl glass-card hover-lift ${
                 cat.wide ? 'col-span-2' : 'col-span-1'
               }`}
             >
-              {/* Subtle gradient hover */}
               <div className={`absolute inset-0 rounded-2xl ${cat.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
               <div className="relative z-10">
-                {/* Category header */}
                 <div className="flex items-center gap-2.5 mb-4">
                   <div className={`p-1.5 rounded-lg ${cat.bg} ${cat.border} border`}>
                     <cat.icon className={`w-4 h-4 ${cat.color}`} />
@@ -123,12 +121,11 @@ export default function Skills() {
                   </span>
                 </div>
 
-                {/* Skills chips */}
                 <div className="flex flex-wrap gap-2">
                   {cat.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-2.5 py-1 text-xs rounded-lg bg-dark-700 text-gray-300 border border-dark-500 group-hover:border-dark-400 transition-colors"
+                      className="px-2.5 py-1 text-xs rounded-lg bg-dark-700/80 text-gray-300 border border-dark-500 group-hover:border-dark-400 transition-colors"
                     >
                       {skill}
                     </span>
@@ -137,13 +134,12 @@ export default function Skills() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Bottom stats bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
           className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
@@ -153,7 +149,7 @@ export default function Skills() {
             { value: '2', label: 'Marketplace Publisher' },
             { value: '50+', label: 'Projects Delivered' },
           ].map((stat) => (
-            <div key={stat.label} className="text-center py-5 px-4 rounded-xl bg-dark-800 border border-dark-500">
+            <div key={stat.label} className="text-center py-5 px-4 rounded-xl glass-card hover-lift">
               <p className="text-2xl font-bold gradient-text mb-1">{stat.value}</p>
               <p className="text-xs text-gray-400">{stat.label}</p>
             </div>

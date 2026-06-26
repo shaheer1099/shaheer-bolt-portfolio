@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
+import HeroAboutSection from './components/HeroAboutSection';
 import Expertise from './components/Expertise';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
@@ -17,8 +16,7 @@ function HomePage() {
     <div className="min-h-screen bg-dark-900 text-white overflow-x-hidden">
       <Navbar />
       <main>
-        <Hero />
-        <About />
+        <HeroAboutSection />
         <Expertise />
         <Skills />
         <Process />

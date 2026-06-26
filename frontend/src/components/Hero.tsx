@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown, Briefcase } from 'lucide-react';
 import portraitImg from '../assets/images/avatar.png';
 
@@ -86,13 +86,23 @@ function InteractiveCanvas() {
       animRef.current = requestAnimationFrame(draw);
     }
 
+    // Listen at the window level so the field reacts even when the cursor is
+    // over the hero content (text/buttons), as long as it stays within bounds.
     const handleMouse = (e: MouseEvent) => {
       const rect = c.getBoundingClientRect();
-      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      mouseRef.current = inside
+        ? { x: e.clientX - rect.left, y: e.clientY - rect.top }
+        : { x: -9999, y: -9999 };
     };
     const handleTouch = (e: TouchEvent) => {
-      const rect = c.getBoundingClientRect();
       const t = e.touches[0];
+      if (!t) return;
+      const rect = c.getBoundingClientRect();
       mouseRef.current = { x: t.clientX - rect.left, y: t.clientY - rect.top };
     };
     const handleLeave = () => { mouseRef.current = { x: -9999, y: -9999 }; };
@@ -100,46 +110,80 @@ function InteractiveCanvas() {
     resize();
     draw();
     window.addEventListener('resize', resize);
-    c.addEventListener('mousemove', handleMouse);
-    c.addEventListener('touchmove', handleTouch, { passive: true });
-    c.addEventListener('mouseleave', handleLeave);
+    window.addEventListener('mousemove', handleMouse);
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+    document.addEventListener('mouseleave', handleLeave);
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
-      c.removeEventListener('mousemove', handleMouse);
-      c.removeEventListener('touchmove', handleTouch);
-      c.removeEventListener('mouseleave', handleLeave);
+      window.removeEventListener('mousemove', handleMouse);
+      window.removeEventListener('touchmove', handleTouch);
+      document.removeEventListener('mouseleave', handleLeave);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ display: 'block' }} />;
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ display: 'block' }} />;
 }
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const scrollToProjects = () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   const scrollToContact = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Parallax: background layers drift at different speeds for depth.
+  const glowOneY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+  const glowTwoY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
+  const meshY = useTransform(scrollYProgress, [0, 1], ['0%', '60%']);
+  const gridY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-dark-900">
-      {/* Ambient glow */}
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden bg-dark-900">
+      {/* Ambient glow — parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-1/4 -left-1/4 w-3/4 h-3/4 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.04) 40%, transparent 70%)' }} />
-        <div className="absolute -bottom-1/4 -right-1/4 w-3/4 h-3/4 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.10) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)' }} />
+        <motion.div
+          style={{ y: glowOneY }}
+          className="absolute -top-1/4 -left-1/4 w-3/4 h-3/4 rounded-full blur-3xl"
+          aria-hidden
+        >
+          <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0.04) 40%, transparent 70%)' }} />
+        </motion.div>
+        <motion.div
+          style={{ y: glowTwoY }}
+          className="absolute -bottom-1/4 -right-1/4 w-3/4 h-3/4 rounded-full blur-3xl"
+          aria-hidden
+        >
+          <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)' }} />
+        </motion.div>
+        <motion.div
+          style={{ y: meshY }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-30 blur-3xl mesh-gradient"
+          aria-hidden
+        />
       </div>
 
-      {/* Interactive dot grid */}
-      <div className="absolute inset-0">
+      {/* Interactive dot grid — parallax */}
+      <motion.div style={{ y: gridY }} className="absolute inset-0 opacity-80">
         <InteractiveCanvas />
-      </div>
+      </motion.div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-2 gap-12 items-center min-h-screen">
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-2 gap-12 items-center min-h-screen"
+      >
         {/* Left — text */}
-        <div className="pointer-events-none">
+        <div className="pointer-events-none lg:max-w-xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dark-700/60 border border-dark-500/80 backdrop-blur-sm pointer-events-auto"
+            className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full glass pointer-events-auto"
           >
             <Briefcase className="w-4 h-4 text-cyan" />
             <span className="text-sm text-gray-300">Open to Remote Opportunities</span>
@@ -149,7 +193,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-6xl xl:text-7xl font-bold mb-6 leading-tight"
+            className="text-5xl md:text-6xl xl:text-7xl font-bold mb-6 leading-[1.05] tracking-tight"
           >
             <span className="block text-white">Hi, I'm</span>
             <span className="gradient-text">Shaheer</span>
@@ -168,7 +212,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-base md:text-lg text-gray-400 mb-8 max-w-lg"
+            className="text-base md:text-lg text-gray-400 mb-8 max-w-lg leading-relaxed"
           >
             Shopify App Development · WordPress/WooCommerce Plugin Development
             <br />
@@ -181,65 +225,37 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 pointer-events-auto"
           >
-            <button
-              onClick={scrollToProjects}
-              className="px-8 py-4 bg-accent hover:bg-accent-light text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-accent/30"
-            >
+            <button onClick={scrollToProjects} className="btn-primary px-8 py-4 font-semibold rounded-xl">
               View My Work
             </button>
-            <button
-              onClick={scrollToContact}
-              className="px-8 py-4 bg-transparent border border-gray-600 hover:border-accent text-white font-semibold rounded-lg transition-all duration-300 hover:bg-dark-700/60 backdrop-blur-sm"
-            >
+            <button onClick={scrollToContact} className="btn-secondary px-8 py-4 font-semibold rounded-xl">
               Get In Touch
             </button>
           </motion.div>
         </div>
 
-        {/* Right — portrait */}
+        {/* Desktop stage — the traveling avatar (rendered by HeroAboutSection) occupies this column */}
+        <div
+          data-avatar-hero-stage
+          className="hidden lg:block relative min-h-[560px]"
+          aria-hidden
+        />
+
+        {/* Mobile portrait fallback */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="hidden lg:flex items-end justify-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="lg:hidden flex justify-center mt-4"
         >
-          <div className="relative">
-            {/* Glow rings */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.22) 0%, rgba(6,182,212,0.10) 50%, transparent 75%)' }} />
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-2xl" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)' }} />
-
-            {/* Portrait image */}
-            <motion.img
-              src={portraitImg}
-              alt="Shaheer"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative z-10 w-[340px] xl:w-[400px] object-contain drop-shadow-2xl"
-              style={{ filter: 'drop-shadow(0 20px 60px rgba(59,130,246,0.25))' }}
-            />
-
-            {/* Floating badge — experience */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-              className="absolute top-16 -left-10 z-20 px-3 py-2 rounded-xl bg-dark-700/90 border border-dark-500 backdrop-blur-sm shadow-xl"
-            >
-              <p className="text-xs text-gray-400">Experience</p>
-              <p className="text-base font-bold text-white">7+ Years</p>
-            </motion.div>
-
-            {/* Floating badge — published */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-              className="absolute top-32 -right-8 z-20 px-3 py-2 rounded-xl bg-dark-700/90 border border-accent/30 backdrop-blur-sm shadow-xl"
-            >
-              <p className="text-xs text-gray-400">Published</p>
-              <p className="text-base font-bold gradient-text">5 Products</p>
-            </motion.div>
-          </div>
+          <img
+            src={portraitImg}
+            alt="Shaheer"
+            className="w-[260px] sm:w-[300px] object-contain"
+            style={{ filter: 'drop-shadow(0 20px 60px rgba(59,130,246,0.25))' }}
+          />
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll cue */}
       <motion.div
@@ -251,7 +267,7 @@ export default function Hero() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="text-gray-500 cursor-pointer"
+          className="text-gray-500 cursor-pointer hover:text-accent transition-colors"
           onClick={scrollToProjects}
         >
           <ChevronDown className="w-8 h-8" />

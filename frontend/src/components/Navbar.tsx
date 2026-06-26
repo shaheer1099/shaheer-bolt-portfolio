@@ -12,11 +12,24 @@ const navLinks = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      const sections = navLinks.map((l) => l.href.slice(1));
+      for (const id of [...sections].reverse()) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          setActiveSection(id);
+          return;
+        }
+      }
+      setActiveSection('');
     };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -35,7 +48,7 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-dark-900/95 backdrop-blur-sm border-b border-dark-700' : 'bg-transparent'
+        isScrolled ? 'glass border-b border-dark-500/50 shadow-lg shadow-black/20' : 'bg-transparent'
       }`}
     >
       <div className="max-w-6xl mx-auto px-6">
@@ -57,9 +70,17 @@ export default function Navbar() {
               <button
                 key={link.name}
                 onClick={() => scrollTo(link.href)}
-                className="text-gray-300 hover:text-accent transition-colors text-sm font-medium"
+                className={`relative text-sm font-medium transition-colors ${
+                  activeSection === link.href.slice(1) ? 'text-accent' : 'text-gray-300 hover:text-white'
+                }`}
               >
                 {link.name}
+                {activeSection === link.href.slice(1) && (
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-accent to-cyan rounded-full"
+                  />
+                )}
               </button>
             ))}
           </div>
@@ -83,7 +104,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden py-4 border-t border-dark-700"
+            className="md:hidden py-4 border-t border-dark-500/50"
           >
             {navLinks.map((link) => (
               <button

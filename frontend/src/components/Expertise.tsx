@@ -7,6 +7,8 @@ import {
   Server,
   LayoutDashboard,
 } from 'lucide-react';
+import SectionHeading from './SectionHeading';
+import ParallaxBlob from './ParallaxBlob';
 
 const expertise = [
   {
@@ -49,31 +51,28 @@ const expertise = [
 
 export default function Expertise() {
   return (
-    <section id="expertise" className="py-24 px-6 bg-dark-900">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">What I Do</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-accent to-cyan mx-auto rounded-full" />
-        </motion.div>
+    <section id="expertise" className="relative py-24 px-6 bg-dark-900 overflow-hidden">
+      <ParallaxBlob className="top-10 -left-24 w-72 h-72 bg-accent/5" distance={90} />
+      <ParallaxBlob className="bottom-0 -right-24 w-80 h-80 bg-cyan/5" distance={140} />
+
+      <div className="relative max-w-6xl mx-auto">
+        <SectionHeading
+          eyebrow="Services"
+          title="What I Do"
+          description="End-to-end ecommerce development — from app architecture to marketplace publication."
+        />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {expertise.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
               viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="group p-6 rounded-xl bg-dark-800 border border-dark-600 transition-all duration-300 hover:border-accent/50 glowing-card"
+              className="group p-6 rounded-2xl glass-card glowing-card"
             >
-              <div className="p-3 rounded-lg bg-accent/10 w-fit mb-4 group-hover:bg-accent/20 transition-colors duration-300">
+              <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 w-fit mb-4 group-hover:bg-accent/20 transition-colors duration-300">
                 <item.icon className="w-6 h-6 text-accent" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-3">{item.title}</h3>

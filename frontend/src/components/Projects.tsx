@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
+import SectionHeading from './SectionHeading';
+import ParallaxBlob from './ParallaxBlob';
 
 type Tab = 'shopify' | 'wordpress' | 'saas';
 
@@ -58,28 +60,21 @@ export default function Projects() {
   const filtered = projects.filter(p => p.tab === activeTab);
 
   return (
-    <section id="projects" className="py-24 px-6 bg-dark-800">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent mb-3 block">
-            Portfolio
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Featured Projects</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-accent to-cyan mx-auto rounded-full mb-4" />
-          <p className="text-gray-400 max-w-xl mx-auto">
-            Real-world products built and shipped — from Shopify apps to WooCommerce plugins and custom SaaS platforms.
-          </p>
-        </motion.div>
+    <section id="projects" className="relative py-24 px-6 bg-dark-800 overflow-hidden">
+      <ParallaxBlob className="top-20 -left-24 w-72 h-72 bg-accent/5" distance={110} />
+      <ParallaxBlob className="bottom-10 -right-24 w-80 h-80 bg-cyan/5" distance={150} />
+
+      <div className="relative max-w-6xl mx-auto">
+        <SectionHeading
+          eyebrow="Portfolio"
+          title="Featured Projects"
+          description="Real-world products built and shipped — from Shopify apps to WooCommerce plugins and custom SaaS platforms."
+          className="mb-10"
+        />
 
         {/* Tab navigation */}
         <div className="flex justify-center mb-12">
-          <div className="flex gap-1 p-1 bg-dark-900 rounded-xl border border-dark-600">
+          <div className="flex gap-1 p-1 glass rounded-xl">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -109,13 +104,14 @@ export default function Projects() {
             {filtered.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.07 }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.45, delay: index * 0.07, ease: 'easeOut' }}
+                viewport={{ once: true, amount: 0.2 }}
               >
                 <Link
                   to={`/projects/${project.id}`}
-                  className="group block bg-[#0d1117] border border-white/6 rounded-2xl overflow-hidden hover:border-white/15 transition-all duration-300 hover:shadow-xl hover:shadow-black/40 hover:-translate-y-1"
+                  className="group block bg-[#0d1117] border border-white/6 rounded-2xl overflow-hidden hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1"
                 >
                   <div className="p-3 pb-0">
                     <BrowserMockup project={project} />
