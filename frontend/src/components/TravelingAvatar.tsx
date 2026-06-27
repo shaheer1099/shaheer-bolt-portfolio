@@ -3,7 +3,12 @@ import type { RefObject } from 'react';
 import standingPose from '../assets/images/avatar1.png';
 import laptopPose from '../assets/images/avatar3.png';
 import techPose from '../assets/images/avatar5.png';
-import { getAboutAvatarRect, getHeroAvatarRect, getTechAvatarRect } from '../constants/avatarDimensions';
+import {
+  getAboutAvatarRect,
+  getAboutAvatarStageRect,
+  getHeroAvatarRect,
+  getTechAvatarRect,
+} from '../constants/avatarDimensions';
 
 interface TravelingAvatarProps {
   wrapperRef: RefObject<HTMLElement | null>;
@@ -19,6 +24,7 @@ const FALLBACK_BOX: AvatarBox = { left: 0, top: 0, width: 460, height: 307 };
  */
 export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
   const [progress, setProgress] = useState(0);
+  const [isDockedAbout, setIsDockedAbout] = useState(false);
   const [techTransitionStart, setTechTransitionStart] = useState(0.68);
   const [box, setBox] = useState<AvatarBox>(() =>
     typeof window !== 'undefined' ? getHeroAvatarRect() ?? FALLBACK_BOX : FALLBACK_BOX,
@@ -42,42 +48,49 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       const techTop = techStack.getBoundingClientRect().top + scrollY;
 
       const start = wrapperTop;
-      const aboutStop = aboutTop - window.innerHeight * 0.28;
+      const aboutStop = aboutTop - 30;
       const aboutMoveStart = Math.max(
         aboutStop,
-        aboutTop + about.offsetHeight - window.innerHeight * 0.85,
+        aboutTop + about.offsetHeight - window.innerHeight + 30,
       );
-      const end = Math.max(start + 1, techTop - window.innerHeight * 0.18);
+      const end = Math.max(aboutMoveStart + 1, techTop - window.innerHeight * 0.08);
       const nextProgress = clamp((scrollY - start) / (end - start));
-      const aboutProgress = clamp((aboutStop - start) / (end - start));
       const techStartProgress = clamp((aboutMoveStart - start) / (end - start));
       setProgress(nextProgress);
       setTechTransitionStart(techStartProgress);
 
+      const heroImgRect = getHeroAvatarRect();
+      const aboutImgRect = getAboutAvatarRect();
+      const aboutStageRect = getAboutAvatarStageRect();
+      const techImgRect = getTechAvatarRect();
+      const startBox = heroImgRect ?? FALLBACK_BOX;
+      const midBox = aboutImgRect
+        ? {
+            left: aboutStageRect
+              ? aboutStageRect.left + aboutStageRect.width / 2 - aboutImgRect.width / 2
+              : aboutImgRect.left,
+            top: aboutImgRect.top,
+            width: aboutImgRect.width,
+            height: aboutImgRect.height,
+          }
+        : startBox;
+      const endBox = techImgRect ?? midBox;
+
+      const firstLegProgress = aboutStop > start ? clamp((scrollY - start) / (aboutStop - start)) : 1;
+      const secondLegProgress = clamp((scrollY - aboutMoveStart) / (end - aboutMoveStart));
+
+      const isHeroToAbout = scrollY <= aboutStop;
+      const isHoldingAbout = scrollY > aboutStop && scrollY <= aboutMoveStart;
+      setIsDockedAbout(isHoldingAbout);
       document.documentElement.style.setProperty(
         '--about-avatar-opacity',
-        '0',
+        isHoldingAbout ? '1' : '0',
       );
       document.documentElement.style.setProperty(
         '--tech-avatar-opacity',
         nextProgress >= 0.985 ? '1' : '0',
       );
 
-      const heroImgRect = getHeroAvatarRect();
-      const aboutImgRect = getAboutAvatarRect();
-      const techImgRect = getTechAvatarRect();
-      const startBox = heroImgRect ?? FALLBACK_BOX;
-      const midBox = aboutImgRect ?? startBox;
-      const endBox = techImgRect ?? midBox;
-
-      const firstLegProgress = aboutProgress > 0 ? clamp(nextProgress / aboutProgress) : 1;
-      const secondLegProgress =
-        techStartProgress < 1
-          ? clamp((nextProgress - techStartProgress) / (1 - techStartProgress))
-          : 1;
-
-      const isHeroToAbout = nextProgress <= aboutProgress;
-      const isHoldingAbout = nextProgress > aboutProgress && nextProgress <= techStartProgress;
       const fromBox = isHeroToAbout ? startBox : midBox;
       const toBox = isHeroToAbout || isHoldingAbout ? midBox : endBox;
       const legProgress = isHeroToAbout ? firstLegProgress : isHoldingAbout ? 1 : secondLegProgress;
@@ -116,7 +129,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       ? Math.min(fade(0.16, 0.34), 1 - fade(techTransitionStart, techTransitionStart + 0.18))
       : 0;
   const techOpacity = progress <= 0.985 ? fade(techTransitionStart + 0.04, techTransitionStart + 0.24) : 0;
-  const layerOpacity = progress < 0.985 ? 1 : 0;
+  const layerOpacity = progress < 0.985 && !isDockedAbout ? 1 : 0;
 
   return (
     <div
