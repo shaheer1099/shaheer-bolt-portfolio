@@ -4,9 +4,11 @@ import { Menu, X } from 'lucide-react';
 
 const navLinks = [
   { name: 'About', href: '#about' },
-  { name: 'Expertise', href: '#expertise' },
+  { name: 'Skills', href: '#tech-stack' },
+  { name: 'Services', href: '#expertise' },
+  { name: 'Process', href: '#process' },
   { name: 'Projects', href: '#projects' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Experience', href: '#experience' },
 ];
 
 export default function Navbar() {
@@ -67,12 +69,12 @@ export default function Navbar() {
             Shaheer Sheikh
           </motion.a>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-5 lg:gap-7">
             {navLinks.map((link) => (
               <button
                 key={link.name}
                 onClick={() => scrollTo(link.href)}
-                className={`relative text-sm font-medium transition-colors ${
+                className={`relative text-xs font-semibold transition-colors lg:text-sm ${
                   activeSection === link.href.slice(1) ? 'text-accent' : 'text-gray-300 hover:text-white'
                 }`}
               >
@@ -88,9 +90,12 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:block">
-            <span className="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium">
-              Available for Work
-            </span>
+            <button
+              onClick={() => scrollTo('#contact')}
+              className="rounded-full border border-green-500/25 bg-green-500/10 px-4 py-2 text-xs font-bold text-green-400 transition-all hover:-translate-y-0.5 hover:border-green-400/45 hover:bg-green-500/15 hover:text-green-300"
+            >
+              Contact Us
+            </button>
           </div>
 
           <button
@@ -118,9 +123,12 @@ export default function Navbar() {
               </button>
             ))}
             <div className="py-3">
-              <span className="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium">
-                Available for Work
-              </span>
+              <button
+                onClick={() => scrollTo('#contact')}
+                className="rounded-full border border-green-500/25 bg-green-500/10 px-4 py-2 text-xs font-bold text-green-400 transition-colors hover:border-green-400/45 hover:bg-green-500/15"
+              >
+                Contact Us
+              </button>
             </div>
           </motion.div>
         )}
