@@ -62,7 +62,7 @@ export default function Navbar() {
             className="text-xl font-bold text-white hover:text-accent transition-colors"
             whileHover={{ scale: 1.05 }}
           >
-            Shaheer
+            Shaheer Sheikh
           </motion.a>
 
           <div className="hidden md:flex items-center gap-8">

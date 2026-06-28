@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import type { RefObject } from 'react';
-import standingPose from '../assets/images/avatar1.png';
+import standingPose from '../assets/images/hero-designer-coder-natural.png';
 import laptopPose from '../assets/images/avatar3.png';
 import techPose from '../assets/images/avatar5.png';
 import {
@@ -47,17 +47,25 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       const aboutTop = about.getBoundingClientRect().top + scrollY;
       const techTop = techStack.getBoundingClientRect().top + scrollY;
 
-      const start = wrapperTop;
       const aboutStop = aboutTop - 30;
+      const heroMoveStart = Math.min(
+        aboutStop,
+        Math.max(wrapperTop, aboutTop - window.innerHeight + 30),
+      );
       const aboutMoveStart = Math.max(
         aboutStop,
         aboutTop + about.offsetHeight - window.innerHeight + 30,
       );
       const end = Math.max(aboutMoveStart + 1, techTop - window.innerHeight * 0.08);
+      const start = heroMoveStart;
       const nextProgress = clamp((scrollY - start) / (end - start));
       const techStartProgress = clamp((aboutMoveStart - start) / (end - start));
       setProgress(nextProgress);
       setTechTransitionStart(techStartProgress);
+      document.documentElement.style.setProperty(
+        '--hero-avatar-opacity',
+        nextProgress > 0.002 && nextProgress < 0.985 ? '0' : '1',
+      );
 
       const heroImgRect = getHeroAvatarRect();
       const aboutImgRect = getAboutAvatarRect();
@@ -76,7 +84,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
         : startBox;
       const endBox = techImgRect ?? midBox;
 
-      const firstLegProgress = aboutStop > start ? clamp((scrollY - start) / (aboutStop - start)) : 1;
+      const firstLegProgress = aboutStop > heroMoveStart ? clamp((scrollY - heroMoveStart) / (aboutStop - heroMoveStart)) : 1;
       const secondLegProgress = clamp((scrollY - aboutMoveStart) / (end - aboutMoveStart));
 
       const isHeroToAbout = scrollY <= aboutStop;
@@ -118,6 +126,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       window.removeEventListener('resize', onScroll);
       document.documentElement.style.removeProperty('--about-avatar-opacity');
       document.documentElement.style.removeProperty('--tech-avatar-opacity');
+      document.documentElement.style.removeProperty('--hero-avatar-opacity');
     };
   }, [wrapperRef]);
 
@@ -129,12 +138,12 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       ? Math.min(fade(0.16, 0.34), 1 - fade(techTransitionStart, techTransitionStart + 0.18))
       : 0;
   const techOpacity = progress <= 0.985 ? fade(techTransitionStart + 0.04, techTransitionStart + 0.24) : 0;
-  const layerOpacity = progress < 0.985 && !isDockedAbout ? 1 : 0;
+  const layerOpacity = progress > 0.002 && progress < 0.985 && !isDockedAbout ? 1 : 0;
 
   return (
     <div
       style={{ opacity: layerOpacity }}
-      className="hidden lg:block fixed inset-0 pointer-events-none z-30"
+      className="hidden lg:block fixed inset-0 pointer-events-none z-20"
     >
       <div
         className="fixed will-change-[left,top,width,height]"
