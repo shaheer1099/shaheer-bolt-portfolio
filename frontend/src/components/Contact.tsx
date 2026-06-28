@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ExternalLink, Github, Linkedin, Mail, Send, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Send } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 const projectTypes = [
   'Shopify App',
@@ -11,9 +12,10 @@ const projectTypes = [
 ];
 
 const contactLinks = [
-  { label: 'Email', value: 'contact@solcoders.com', href: 'mailto:contact@solcoders.com', icon: Mail },
-  { label: 'LinkedIn', value: 'Professional profile', href: 'https://linkedin.com', icon: Linkedin },
-  { label: 'GitHub', value: 'Code and projects', href: 'https://github.com', icon: Github },
+  { label: 'Email', value: 'shaheerasheikh00@gmail.com', href: 'mailto:shaheerasheikh00@gmail.com' },
+  { label: 'LinkedIn', value: 'shaheer-sheikh', href: 'https://www.linkedin.com/in/shaheer-sheikh/' },
+  { label: 'Fiverr', value: 'Freelance profile', href: 'https://www.fiverr.com/s/pd7DKGy' },
+  { label: 'Upwork', value: 'Freelance profile', href: 'https://www.upwork.com/freelancers/shaheera65' },
 ];
 
 export default function Contact() {
@@ -55,65 +57,39 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.36fr)_minmax(0,0.64fr)]">
           <motion.aside
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="space-y-5"
+            className="rounded-2xl border border-white/10 bg-dark-900/62 p-5 backdrop-blur-xl md:p-6"
           >
-            <div className="rounded-xl border border-dark-500/70 bg-dark-900/76 p-6 backdrop-blur-xl">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-accent/20 bg-accent/10">
-                <Sparkles className="h-5 w-5 text-accent" />
-              </div>
-              <h3 className="text-2xl font-bold text-white">Available for remote ecommerce work</h3>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent">Direct Channels</span>
+              <h3 className="mt-3 text-2xl font-bold text-white">Pick the fastest route</h3>
               <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                I work with teams across the US, UK, Europe, and MENA on Shopify apps, WooCommerce plugins, checkout flows, dashboards, and custom platforms.
+                Send the project context, timeline, and platform. I will reply with a practical next step instead of a generic sales response.
               </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                {['Fast scoping', 'Clean delivery', 'Production focus', 'Long-term support'].map((item) => (
-                  <div key={item} className="rounded-lg border border-dark-500/70 bg-dark-800/60 px-3 py-2 text-xs font-semibold text-gray-300">
-                    {item}
-                  </div>
-                ))}
-              </div>
             </div>
 
-            <div className="grid gap-3">
+            <div className="mt-7 grid grid-cols-2 gap-3">
               {contactLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target={link.href.startsWith('http') ? '_blank' : undefined}
                   rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="group flex items-center justify-between rounded-xl border border-dark-500/70 bg-dark-900/68 p-4 backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-accent/35 hover:bg-dark-800/78"
+                  className="group flex min-h-[116px] flex-col justify-between rounded-xl border border-white/10 bg-white/[0.035] p-4 transition-all hover:-translate-y-1 hover:border-accent/35 hover:bg-white/[0.065]"
                 >
-                  <span className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-dark-500 bg-dark-800">
-                      <link.icon className="h-4 w-4 text-accent" />
-                    </span>
-                    <span>
-                      <span className="block text-sm font-bold text-white">{link.label}</span>
-                      <span className="block text-xs text-gray-500">{link.value}</span>
-                    </span>
+                  <span className="flex items-center justify-between gap-3">
+                    <BrandLogo name={link.label} />
+                    <ArrowUpRight className="h-4 w-4 text-gray-600 transition-colors group-hover:text-white" />
                   </span>
-                  <ArrowUpRight className="h-4 w-4 text-gray-600 transition-colors group-hover:text-white" />
-                </a>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {['Upwork', 'Fiverr'].map((label) => (
-                <a
-                  key={label}
-                  href={`https://${label.toLowerCase()}.com`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-300 transition-all hover:-translate-y-0.5 hover:border-emerald-300/40"
-                >
-                  {label}
-                  <ExternalLink className="h-4 w-4" />
+                  <span>
+                    <span className="block text-sm font-bold text-white">{link.label}</span>
+                    <span className="mt-1 block truncate text-xs text-gray-500">{link.value}</span>
+                  </span>
                 </a>
               ))}
             </div>
@@ -124,8 +100,9 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="rounded-xl border border-dark-500/70 bg-dark-900/78 p-5 backdrop-blur-xl md:p-7"
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-dark-900/78 p-5 backdrop-blur-xl md:p-7"
           >
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent" />
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid gap-5 md:grid-cols-2">
                 <div>

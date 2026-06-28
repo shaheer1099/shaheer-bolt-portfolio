@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
-import heroPortrait from '../assets/images/hero-designer-coder-natural.png';
+import heroPortrait from '../assets/images/hero-designer-coder-full-effect.png';
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -44,17 +44,17 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        <div className="grid min-h-0 flex-1 items-center pb-3 pt-0 lg:pb-4">
+        <div className="grid min-h-0 flex-1 items-end pb-0 pt-0">
           <div className="grid items-end [grid-area:1/1]">
             <motion.div
               initial={{ opacity: 0, y: 22, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.14 }}
-              className="z-20 mx-auto flex h-[min(54vh,610px)] min-h-[380px] w-[min(70vw,700px)] translate-y-12 items-end justify-center lg:h-[min(62vh,680px)] lg:min-h-[460px] [grid-area:1/1]"
+              className="z-20 mx-auto flex h-[min(70vh,760px)] min-h-[430px] w-[min(78vw,780px)] items-end justify-center md:h-[min(78vh,840px)] md:min-h-[520px] [grid-area:1/1]"
             >
               <div
                 data-avatar-hero-stage
-                className="hidden h-full w-full items-end justify-center overflow-visible lg:flex"
+                className="hidden h-full w-full items-end justify-center overflow-visible md:flex"
                 aria-hidden
               >
                 <img
@@ -64,16 +64,18 @@ export default function Hero() {
                   decoding="async"
                   fetchPriority="high"
                   style={{ opacity: 'var(--hero-avatar-opacity, 1)' }}
-                  className="avatar-crisp h-[clamp(470px,64vh,720px)] w-auto max-w-none object-contain object-bottom"
+                  className="avatar-crisp h-[clamp(560px,78vh,860px)] w-auto max-w-none object-contain object-bottom"
                 />
               </div>
-              <img
+              <motion.img
                 src={heroPortrait}
                 alt="Shaheer designer and coder portrait"
                 decoding="async"
                 fetchPriority="high"
-                style={{ opacity: 'var(--hero-avatar-opacity, 1)' }}
-                className="avatar-crisp h-[min(520px,64vh)] w-auto max-w-none object-contain object-bottom lg:hidden"
+                initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                animate={{ opacity: 0.48, y: 0, scale: 1 }}
+                transition={{ duration: 0.7, delay: 0.22 }}
+                className="avatar-crisp h-[min(580px,72vh)] w-auto max-w-none object-contain object-bottom md:hidden"
               />
             </motion.div>
 
@@ -81,11 +83,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.1 }}
-              className="pointer-events-none z-40 grid grid-cols-1 select-none gap-y-5 self-center [grid-area:1/1] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-y-3"
+              className="pointer-events-none z-50 grid grid-cols-1 select-none gap-y-5 self-center [grid-area:1/1] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-y-3"
             >
               <h1 className="contents">
                 <span
-                  className="block pl-[max(1rem,3.6vw)] text-[clamp(3.8rem,9.2vw,10.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white lg:[grid-column:1] lg:[grid-row:1]"
+                  className="block pl-[max(1rem,3.6vw)] text-[clamp(3.6rem,17vw,6.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(3.8rem,9.2vw,10.4rem)] lg:[grid-column:1] lg:[grid-row:1]"
                   style={{
                     textShadow:
                       '0 1px 0 rgba(241,245,249,0.95), 0 2px 0 rgba(203,213,225,0.9), 0 3px 0 rgba(148,163,184,0.74), 0 5px 0 rgba(71,85,105,0.68), 0 18px 34px rgba(0,0,0,0.56)',
@@ -94,7 +96,7 @@ export default function Hero() {
                   Full stack
                 </span>
                 <span
-                  className="block pr-[max(1rem,2.8vw)] text-right text-[clamp(3.8rem,9.2vw,10.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white lg:[grid-column:2] lg:[grid-row:2]"
+                  className="block pr-[max(1rem,2.8vw)] text-right text-[clamp(3.6rem,17vw,6.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(3.8rem,9.2vw,10.4rem)] lg:[grid-column:2] lg:[grid-row:2]"
                   style={{
                     textShadow:
                       '0 1px 0 rgba(241,245,249,0.95), 0 2px 0 rgba(203,213,225,0.9), 0 3px 0 rgba(148,163,184,0.74), 0 5px 0 rgba(71,85,105,0.68), 0 18px 34px rgba(0,0,0,0.56)',

@@ -48,7 +48,9 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass border-b border-dark-500/50 shadow-lg shadow-black/20' : 'bg-transparent'
+        isScrolled || isMobileMenuOpen
+          ? 'border-b border-dark-500/70 bg-[#070910]/95 shadow-lg shadow-black/30 backdrop-blur-xl'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-6xl mx-auto px-6">
@@ -104,7 +106,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden py-4 border-t border-dark-500/50"
+            className="md:hidden border-t border-dark-500/70 bg-[#070910]/98 py-4 shadow-2xl shadow-black/40"
           >
             {navLinks.map((link) => (
               <button

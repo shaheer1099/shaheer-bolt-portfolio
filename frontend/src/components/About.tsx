@@ -112,7 +112,7 @@ export default function About() {
               data-avatar-about-img
               src={laptopPose}
               alt="Shaheer working on a laptop"
-              className={`relative z-40 avatar-crisp ${AVATAR_HEIGHT_CLASS} w-auto max-w-none shrink-0 object-contain object-center lg:opacity-[var(--about-avatar-opacity,0)]`}
+              className={`relative z-40 avatar-crisp ${AVATAR_HEIGHT_CLASS} w-auto max-w-none shrink-0 object-contain object-center md:opacity-[var(--about-avatar-opacity,0)]`}
             />
           </motion.div>
         </div>

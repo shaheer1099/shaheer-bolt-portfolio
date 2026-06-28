@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import type { RefObject } from 'react';
-import standingPose from '../assets/images/hero-designer-coder-natural.png';
+import standingPose from '../assets/images/hero-designer-coder-full-effect.png';
 import laptopPose from '../assets/images/avatar3.png';
 import techPose from '../assets/images/avatar5.png';
 import {
@@ -37,6 +37,15 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
     const lerp = (start: number, end: number, amount: number) => start + (end - start) * amount;
 
     const update = () => {
+      if (window.innerWidth < 768) {
+        setProgress(0);
+        setIsDockedAbout(false);
+        document.documentElement.style.setProperty('--hero-avatar-opacity', '1');
+        document.documentElement.style.setProperty('--about-avatar-opacity', '1');
+        document.documentElement.style.setProperty('--tech-avatar-opacity', '1');
+        return;
+      }
+
       const wrapper = wrapperRef.current;
       const about = document.getElementById('about');
       const techStack = document.getElementById('tech-stack');
@@ -143,7 +152,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
   return (
     <div
       style={{ opacity: layerOpacity }}
-      className="hidden lg:block fixed inset-0 pointer-events-none z-20"
+      className="hidden md:block fixed inset-0 pointer-events-none z-20"
     >
       <div
         className="fixed will-change-[left,top,width,height]"

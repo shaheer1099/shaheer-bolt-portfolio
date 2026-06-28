@@ -98,6 +98,20 @@ body {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
+
+  .brand-marquee-track {
+    animation: brand-marquee 18s linear infinite;
+  }
+}
+
+@keyframes brand-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

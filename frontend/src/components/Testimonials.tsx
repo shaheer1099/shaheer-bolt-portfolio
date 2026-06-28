@@ -42,7 +42,7 @@ export default function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(300px,0.38fr)] lg:items-end"
+          className="mb-12 max-w-3xl"
         >
           <div>
             <span className="section-eyebrow mb-4 block text-left">Client Stories</span>
@@ -53,15 +53,6 @@ export default function Testimonials() {
             <p className="max-w-2xl text-sm leading-relaxed text-gray-400 md:text-base">
               A portfolio should show more than screens. These stories focus on the kind of delivery outcomes clients usually need: shipping, stability, and maintainable growth.
             </p>
-          </div>
-
-          <div className="grid grid-cols-3 overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/70 backdrop-blur-xl">
-            {['Apps', 'Plugins', 'Platforms'].map((label) => (
-              <div key={label} className="border-r border-dark-500/70 px-4 py-4 text-center last:border-r-0">
-                <div className="text-lg font-bold text-white">{label}</div>
-                <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500">Delivered</div>
-              </div>
-            ))}
           </div>
         </motion.div>
 

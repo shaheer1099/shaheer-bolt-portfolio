@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Code2, Compass, Rocket } from 'lucide-react';
+import { CheckCircle2, Code2, Compass, Rocket } from 'lucide-react';
 
 const steps = [
   {
@@ -86,12 +86,6 @@ export default function Process() {
                   </div>
                 ))}
               </div>
-
-              {index < steps.length - 1 && (
-                <span className="absolute -right-3 top-1/2 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-dark-500 bg-dark-900 text-gray-600 md:flex">
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              )}
             </motion.article>
           ))}
         </div>
