@@ -53,17 +53,7 @@ const services = [
 
 export default function ServicesPortfolio() {
   return (
-    <section id="expertise" className="relative isolate overflow-hidden bg-[#06080d] px-6 pb-24 pt-24">
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.08] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px)',
-          backgroundSize: '42px 42px',
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-x-0 top-0 -z-10 h-[680px] bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,219,0.16),transparent_44%),linear-gradient(180deg,rgba(15,23,42,0.7),rgba(6,8,13,0))]" />
+    <section id="expertise" className="relative isolate overflow-hidden px-6 pb-24 pt-24">
       <div className="absolute left-1/2 top-28 -z-10 h-px w-[min(1120px,calc(100%-48px))] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">

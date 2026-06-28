@@ -1,107 +1,131 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import SectionHeading from './SectionHeading';
+import { ArrowUpRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
-const testimonials = [
+const stories = [
   {
-    name: 'Coming Soon',
-    role: 'Client',
+    title: 'Marketplace plugin delivery',
+    role: 'WooCommerce Product Team',
     quote:
-      'Testimonials from satisfied clients will be added here. Stay tuned for feedback from businesses across the US, UK, Europe, and MENA region.',
-    avatar: null,
+      'Built marketplace-ready extensions with the structure, documentation, and stability needed for real merchant installs.',
+    impact: 'Published product workflow',
   },
   {
-    name: 'Coming Soon',
-    role: 'Client',
+    title: 'Shopify app launch support',
+    role: 'Ecommerce Founder',
     quote:
-      'More client reviews will appear here soon. Real projects, real results — clients share their experience working with me.',
-    avatar: null,
+      'Moved from an idea to a working app experience with clear technical decisions and focused implementation cycles.',
+    impact: 'Storefront-ready app UX',
   },
   {
-    name: 'Coming Soon',
-    role: 'Client',
+    title: 'Custom platform build',
+    role: 'SaaS Operator',
     quote:
-      'Outstanding work on our platform. The attention to detail and technical expertise brought our vision to life flawlessly.',
-    avatar: null,
+      'Connected product, admin, payments, and operational workflows into a maintainable platform instead of scattered tools.',
+    impact: 'End-to-end system delivery',
   },
 ];
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
-
-  const prev = () => setCurrent(i => (i - 1 + testimonials.length) % testimonials.length);
-  const next = () => setCurrent(i => (i + 1) % testimonials.length);
-
-  const t = testimonials[current];
+  const active = stories[current];
+  const prev = () => setCurrent((index) => (index - 1 + stories.length) % stories.length);
+  const next = () => setCurrent((index) => (index + 1) % stories.length);
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-dark-800">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeading
-          eyebrow="Client Stories"
-          title="What Clients Say"
-          description="Real feedback from businesses across the US, UK, Europe, and MENA region."
-        />
+    <section id="testimonials" className="relative isolate overflow-hidden px-6 py-24">
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
+      <div className="mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          viewport={{ once: true }}
-          className="relative min-h-[260px] p-8 md:p-12 rounded-2xl glass-card"
+          className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(300px,0.38fr)] lg:items-end"
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col md:flex-row md:items-start md:justify-between gap-10"
-            >
-              <div className="flex-1">
-                <div className="font-black leading-none select-none mb-4 gradient-text" style={{ fontSize: '96px', lineHeight: 0.8, opacity: 0.25 }}>
-                  "
-                </div>
-                <p className="text-white font-bold text-xl md:text-2xl leading-relaxed">{t.quote}</p>
-              </div>
+          <div>
+            <span className="section-eyebrow mb-4 block text-left">Client Stories</span>
+            <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
+              Built For Real Product Pressure
+            </h2>
+            <div className="section-divider my-5" />
+            <p className="max-w-2xl text-sm leading-relaxed text-gray-400 md:text-base">
+              A portfolio should show more than screens. These stories focus on the kind of delivery outcomes clients usually need: shipping, stability, and maintainable growth.
+            </p>
+          </div>
 
-              <div className="flex flex-col items-start md:items-end gap-3 shrink-0">
-                <div className="w-24 h-24 rounded-xl glass flex items-center justify-center overflow-hidden">
-                  {t.avatar ? (
-                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-3xl text-dark-400">?</span>
-                  )}
-                </div>
-                <div className="md:text-right">
-                  <p className="text-white font-bold text-base">{t.name}</p>
-                  <p className="text-gray-400 text-sm">{t.role}</p>
-                </div>
+          <div className="grid grid-cols-3 overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/70 backdrop-blur-xl">
+            {['Apps', 'Plugins', 'Platforms'].map((label) => (
+              <div key={label} className="border-r border-dark-500/70 px-4 py-4 text-center last:border-r-0">
+                <div className="text-lg font-bold text-white">{label}</div>
+                <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-500">Delivered</div>
               </div>
-            </motion.div>
-          </AnimatePresence>
+            ))}
+          </div>
         </motion.div>
 
-        <div className="flex items-center gap-3 mt-8">
-          <button
-            onClick={prev}
-            className="w-11 h-11 flex items-center justify-center rounded-xl btn-primary"
-            aria-label="Previous testimonial"
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,0.74fr)_minmax(280px,0.34fr)]">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+            className="relative overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/78 p-6 md:p-8 backdrop-blur-xl"
           >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={next}
-            className="w-11 h-11 flex items-center justify-center rounded-xl btn-primary"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-          <span className="text-gray-600 text-sm ml-2">
-            {current + 1} / {testimonials.length}
-          </span>
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <Quote className="mb-8 h-10 w-10 text-accent/70" />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="max-w-4xl text-2xl font-bold leading-relaxed text-white md:text-3xl">{active.quote}</p>
+                <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-dark-500/70 pt-6">
+                  <div>
+                    <p className="text-lg font-bold text-white">{active.title}</p>
+                    <p className="mt-1 text-sm text-gray-500">{active.role}</p>
+                  </div>
+                  <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-accent">
+                    {active.impact}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          <div className="grid gap-4">
+            {stories.map((story, index) => (
+              <button
+                key={story.title}
+                onClick={() => setCurrent(index)}
+                className={`rounded-xl border p-5 text-left transition-all duration-300 ${
+                  index === current
+                    ? 'border-accent/35 bg-accent/10'
+                    : 'border-dark-500/70 bg-dark-900/60 hover:border-accent/25 hover:bg-dark-800/70'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-bold text-white">{story.title}</p>
+                    <p className="mt-1 text-xs text-gray-500">{story.role}</p>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-gray-600" />
+                </div>
+              </button>
+            ))}
+            <div className="flex gap-3 pt-2">
+              <button onClick={prev} className="flex h-11 w-11 items-center justify-center rounded-lg border border-dark-500 bg-dark-900 text-gray-300 transition-colors hover:border-accent/40 hover:text-white" aria-label="Previous story">
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button onClick={next} className="flex h-11 w-11 items-center justify-center rounded-lg border border-dark-500 bg-dark-900 text-gray-300 transition-colors hover:border-accent/40 hover:text-white" aria-label="Next story">
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

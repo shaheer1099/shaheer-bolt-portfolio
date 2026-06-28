@@ -203,18 +203,8 @@ export default function Projects() {
   if (!featured) return null;
 
   return (
-    <section id="projects" className="relative isolate overflow-hidden bg-dark-900 px-6 py-24">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/25 to-transparent" />
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px)',
-          backgroundSize: '44px 44px',
-        }}
-        aria-hidden
-      />
-      <div className="absolute inset-x-0 top-0 -z-10 h-[560px] bg-[radial-gradient(ellipse_at_50%_0%,rgba(59,130,246,0.16),transparent_52%)]" />
+    <section id="projects" className="relative isolate overflow-hidden px-6 py-24">
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">
         <motion.div

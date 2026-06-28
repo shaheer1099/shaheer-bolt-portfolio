@@ -35,7 +35,17 @@ export default function About() {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>(0.2);
 
   return (
-    <section id="about" className="relative py-24 px-6 bg-dark-800 overflow-x-hidden">
+    <section id="about" className="relative isolate overflow-x-hidden bg-[#070910] px-6 py-24">
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.06]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px)',
+          backgroundSize: '44px 44px',
+        }}
+        aria-hidden
+      />
+      <div className="absolute inset-x-0 top-0 -z-10 h-[560px] bg-[radial-gradient(ellipse_at_75%_18%,rgba(59,130,246,0.12),transparent_46%)]" />
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           eyebrow="About Me"
