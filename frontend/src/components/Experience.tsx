@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { Briefcase, CheckCircle2, Code2, MapPin } from 'lucide-react';
+import solcodersLogo from '../assets/logos/solcoders.svg';
+import codupLogo from '../assets/logos/codup.svg';
 
 const experiences = [
   {
@@ -19,62 +21,28 @@ const experiences = [
       'Leadership on internal platforms including HRM and enterprise systems',
     ],
     skills: 'Shopify App Development, Shopify Public App Development, WordPress Plugins',
-    accent: 'from-red-500/20 to-cyan-500/10',
-    logo: 'SC',
+    logo: solcodersLogo,
+    logoAlt: 'SolCoders logo',
   },
   {
     company: 'Codup',
-    duration: 'Jan 2023 - Nov 2023',
-    tenure: '11 mos',
-    location: '',
-    title: 'Software Engineer II | Ecommerce & WordPress Solutions',
+    duration: 'Aug 2019 - Nov 2023',
+    tenure: '4 yrs 4 mos',
+    location: 'Karachi, Sindh, Pakistan',
+    title: 'Software Engineer | Ecommerce & WordPress Solutions',
     type: 'Full-time',
     summary:
-      'Worked on B2B and B2C ecommerce solutions for WordPress, focusing on custom business logic and scalable frontend/backend implementations.',
+      'Worked across B2B and B2C ecommerce solutions for WordPress, building custom business logic, backend workflows, and scalable frontend implementations.',
     points: [
       'Built custom payment methods, shipping logic, role-based pricing, and permissions',
       'Implemented split-order functionality based on real-time stock availability',
       'Led complete frontend design for B2B platforms',
       'Delivered end-to-end features using PHP, JavaScript, React, and modern UI practices',
+      'Contributed to reusable frontend and backend components across ecommerce products',
     ],
-    skills: 'Skill Development, Web Design, WordPress, PHP, React',
-    accent: 'from-lime-500/20 to-emerald-500/10',
-    logo: '</>',
-  },
-  {
-    company: 'Codup',
-    duration: 'Feb 2020 - Dec 2022',
-    tenure: '2 yrs 11 mos',
-    location: 'Karachi, Sindh, Pakistan',
-    title: 'Software Engineer | Ecommerce & Platform Development',
-    type: 'Full-time',
-    summary:
-      'Contributed to the development of custom ecommerce products and platforms across B2B and B2C use cases.',
-    points: [
-      'Developed reusable frontend and backend components',
-      'Worked on business requirement analysis, debugging, and performance improvements',
-      'Collaborated closely with product and design teams to deliver production-ready features',
-    ],
-    skills: 'MongoDB, Redux.js, Ecommerce Systems, Backend Logic',
-    accent: 'from-blue-500/20 to-cyan-500/10',
-    logo: 'C',
-  },
-  {
-    company: 'Codup',
-    duration: 'Aug 2019 - Feb 2020',
-    tenure: '7 mos',
-    location: 'Karachi, Sindh, Pakistan',
-    title: 'Software Engineer | Backend & Ecommerce Systems',
-    type: 'Part-time',
-    summary:
-      'Worked on B2B and B2C product development with a focus on backend logic, APIs, and application workflows.',
-    points: [
-      'Worked on B2B and B2C product development',
-      'Contributed to backend logic, APIs, and application workflows',
-    ],
-    skills: 'Backend Development, APIs, Ecommerce Workflows',
-    accent: 'from-orange-500/20 to-rose-500/10',
-    logo: 'BE',
+    skills: 'WordPress, PHP, React, Ecommerce Systems, Backend Logic',
+    logo: codupLogo,
+    logoAlt: 'Codup logo',
   },
 ];
 
@@ -113,14 +81,10 @@ export default function Experience() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.18 }}
                 transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
-                className="relative grid gap-4 rounded-2xl border border-white/10 bg-dark-900/72 p-5 backdrop-blur-xl md:grid-cols-[64px_minmax(0,1fr)] md:p-6"
+                className="relative grid gap-4 rounded-2xl border border-white/10 bg-dark-900/72 p-5 backdrop-blur-xl md:grid-cols-[56px_minmax(0,1fr)] md:p-6"
               >
-                <div className="relative">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br ${item.accent} text-sm font-black text-white shadow-card`}
-                  >
-                    {item.logo}
-                  </div>
+                <div className="relative flex items-start justify-start">
+                  <img src={item.logo} alt={item.logoAlt} loading="lazy" className="h-8 w-8 object-contain md:h-10 md:w-10" />
                 </div>
 
                 <div>

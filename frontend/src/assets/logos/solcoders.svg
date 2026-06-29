@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 27" role="img" aria-labelledby="title">
+  <title>SolCoders</title>
+  <path fill="#06172f" d="M7.2 18.7h17.6l2.3 5.1H4.9l2.3-5.1z"/>
+  <path fill="#ed1c24" d="M16 1.6C9.4 1.6 4 5.8 4 11c0 3.1 1.9 5.8 4.9 7.5l-1.8 4.2 6.2-2.4c.9.1 1.8.2 2.7.2 6.6 0 12-4.2 12-9.4S22.6 1.6 16 1.6z"/>
+  <ellipse cx="12.4" cy="8.8" rx="2.2" ry="3.2" fill="#06172f"/>
+  <ellipse cx="20.1" cy="8.8" rx="2.2" ry="3.2" fill="#06172f"/>
+</svg>

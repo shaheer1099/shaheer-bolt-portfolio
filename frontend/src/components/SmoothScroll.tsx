@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const sectionIds = [
   'hero',
+  'brand-slider',
   'about',
   'tech-stack',
   'expertise',
@@ -29,6 +30,8 @@ const scrollToHash = (hash: string) => {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
+
+const getSectionTop = (section: HTMLElement) => section.getBoundingClientRect().top + window.scrollY;
 
 export default function SmoothScroll() {
   const location = useLocation();
@@ -63,17 +66,40 @@ export default function SmoothScroll() {
     };
 
     const getCurrentIndex = (sections: HTMLElement[]) => {
+      const sliderIndex = sections.findIndex((section) => section.id === 'brand-slider');
+
+      if (sliderIndex >= 0 && Math.abs(window.scrollY - getSnapTop(sections[sliderIndex])) <= 48) {
+        return sliderIndex;
+      }
+
       const anchor = window.scrollY + window.innerHeight * 0.42;
       let current = 0;
 
       sections.forEach((section, index) => {
-        const top = section.getBoundingClientRect().top + window.scrollY;
+        const top = getSectionTop(section);
         if (top <= anchor) {
           current = index;
         }
       });
 
       return current;
+    };
+
+    const getSnapTop = (section: HTMLElement) => {
+      if (section.id !== 'brand-slider') {
+        return getSectionTop(section);
+      }
+
+      const hero = document.getElementById('hero');
+      const sliderTop = getSectionTop(section);
+      const sliderHeight = section.offsetHeight;
+      const framedTop = sliderTop - Math.max(0, window.innerHeight - sliderHeight);
+
+      return Math.max(hero ? getSectionTop(hero) : 0, framedTop);
+    };
+
+    const scrollToSection = (section: HTMLElement) => {
+      window.scrollTo({ top: getSnapTop(section), behavior: 'smooth' });
     };
 
     const handleWheel = (event: WheelEvent) => {
@@ -99,6 +125,26 @@ export default function SmoothScroll() {
       }
 
       const currentIndex = getCurrentIndex(sections);
+      const currentSection = sections[currentIndex];
+      const currentTop = getSectionTop(currentSection);
+      const currentBottom = currentTop + currentSection.offsetHeight;
+      const canScrollWithinCurrentSection = currentSection.offsetHeight > window.innerHeight + 16;
+      const boundaryTolerance = 24;
+
+      if (canScrollWithinCurrentSection) {
+        const sectionStart = currentTop + boundaryTolerance;
+        const sectionEnd = currentBottom - window.innerHeight - boundaryTolerance;
+        const isNearSectionStart = window.scrollY <= sectionStart + boundaryTolerance;
+
+        if (event.deltaY > 0 && window.scrollY < sectionEnd) {
+          return;
+        }
+
+        if (event.deltaY < 0 && window.scrollY > sectionStart && !isNearSectionStart) {
+          return;
+        }
+      }
+
       const nextIndex = Math.max(
         0,
         Math.min(sections.length - 1, currentIndex + (event.deltaY > 0 ? 1 : -1)),
@@ -111,7 +157,7 @@ export default function SmoothScroll() {
 
       event.preventDefault();
       lockUntilRef.current = now + 720;
-      nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToSection(nextSection);
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
