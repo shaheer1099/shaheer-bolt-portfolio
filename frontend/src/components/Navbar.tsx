@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -12,6 +13,8 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -19,6 +22,11 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      if (location.pathname !== '/') {
+        setActiveSection('');
+        return;
+      }
 
       const sections = navLinks.map((l) => l.href.slice(1));
       for (const id of [...sections].reverse()) {
@@ -34,9 +42,15 @@ export default function Navbar() {
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const scrollTo = (href: string) => {
+    if (location.pathname !== '/') {
+      navigate(`/${href}`);
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -61,7 +75,11 @@ export default function Navbar() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              if (location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                navigate('/');
+              }
             }}
             className="text-xl font-bold text-white hover:text-accent transition-colors"
             whileHover={{ scale: 1.05 }}

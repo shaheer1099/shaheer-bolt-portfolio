@@ -26,13 +26,42 @@ export default function Contact() {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    setFormData({ name: '', email: '', projectType: '', message: '' });
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/shaheerasheikh00@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          projectType: formData.projectType,
+          message: formData.message,
+          _subject: `New portfolio inquiry from ${formData.name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Contact form submission failed');
+      }
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', projectType: '', message: '' });
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -164,6 +193,18 @@ export default function Contact() {
                 {isSubmitting ? 'Sending...' : 'Send Message'}
                 {!isSubmitting && <Send className="h-4 w-4" />}
               </button>
+
+              {submitStatus === 'success' && (
+                <p className="text-sm font-medium text-green-400">
+                  Message sent. I will get back to you soon.
+                </p>
+              )}
+
+              {submitStatus === 'error' && (
+                <p className="text-sm font-medium text-red-400">
+                  Message could not be sent. Please email me directly at shaheerasheikh00@gmail.com.
+                </p>
+              )}
             </form>
           </motion.div>
         </div>

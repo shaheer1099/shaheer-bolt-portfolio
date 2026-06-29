@@ -3,10 +3,12 @@ import type { RefObject } from 'react';
 import standingPose from '../assets/images/hero-designer-coder-full-effect.png';
 import laptopPose from '../assets/images/avatar3.png';
 import techPose from '../assets/images/avatar5.png';
+import deskPose from '../assets/images/avatar4.png';
 import {
   getAboutAvatarRect,
   getAboutAvatarStageRect,
   getHeroAvatarRect,
+  getServicesAvatarRect,
   getTechAvatarRect,
 } from '../constants/avatarDimensions';
 
@@ -23,9 +25,13 @@ const FALLBACK_BOX: AvatarBox = { left: 0, top: 0, width: 460, height: 307 };
  * this layer is always mounted and pinned to that box until scroll moves it.
  */
 export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
-  const [progress, setProgress] = useState(0);
-  const [isDockedAbout, setIsDockedAbout] = useState(false);
-  const [techTransitionStart, setTechTransitionStart] = useState(0.68);
+  const [poseOpacity, setPoseOpacity] = useState({
+    standing: 1,
+    laptop: 0,
+    tech: 0,
+    desk: 0,
+  });
+  const [layerOpacity, setLayerOpacity] = useState(0);
   const [box, setBox] = useState<AvatarBox>(() =>
     typeof window !== 'undefined' ? getHeroAvatarRect() ?? FALLBACK_BOX : FALLBACK_BOX,
   );
@@ -38,23 +44,26 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
 
     const update = () => {
       if (window.innerWidth < 768) {
-        setProgress(0);
-        setIsDockedAbout(false);
+        setLayerOpacity(0);
+        setPoseOpacity({ standing: 1, laptop: 0, tech: 0, desk: 0 });
         document.documentElement.style.setProperty('--hero-avatar-opacity', '1');
         document.documentElement.style.setProperty('--about-avatar-opacity', '1');
         document.documentElement.style.setProperty('--tech-avatar-opacity', '1');
+        document.documentElement.style.setProperty('--services-avatar-opacity', '1');
         return;
       }
 
       const wrapper = wrapperRef.current;
       const about = document.getElementById('about');
       const techStack = document.getElementById('tech-stack');
-      if (!wrapper || !about || !techStack) return;
+      const services = document.getElementById('expertise');
+      if (!wrapper || !about || !techStack || !services) return;
 
       const scrollY = window.scrollY || window.pageYOffset;
       const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
       const aboutTop = about.getBoundingClientRect().top + scrollY;
       const techTop = techStack.getBoundingClientRect().top + scrollY;
+      const servicesTop = services.getBoundingClientRect().top + scrollY;
 
       const aboutStop = aboutTop - 30;
       const heroMoveStart = Math.min(
@@ -65,21 +74,20 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
         aboutStop,
         aboutTop + about.offsetHeight - window.innerHeight + 30,
       );
-      const end = Math.max(aboutMoveStart + 1, techTop - window.innerHeight * 0.08);
-      const start = heroMoveStart;
-      const nextProgress = clamp((scrollY - start) / (end - start));
-      const techStartProgress = clamp((aboutMoveStart - start) / (end - start));
-      setProgress(nextProgress);
-      setTechTransitionStart(techStartProgress);
+      const techStop = Math.max(aboutMoveStart + 1, techTop - window.innerHeight * 0.08);
+      const servicesMoveStart = Math.max(techStop, servicesTop - window.innerHeight + 30);
+      const servicesStop = Math.max(servicesMoveStart + 1, servicesTop - 30);
+
       document.documentElement.style.setProperty(
         '--hero-avatar-opacity',
-        nextProgress > 0.002 && nextProgress < 0.985 ? '0' : '1',
+        scrollY >= heroMoveStart && scrollY < aboutStop ? '0' : '1',
       );
 
       const heroImgRect = getHeroAvatarRect();
       const aboutImgRect = getAboutAvatarRect();
       const aboutStageRect = getAboutAvatarStageRect();
       const techImgRect = getTechAvatarRect();
+      const servicesImgRect = getServicesAvatarRect();
       const startBox = heroImgRect ?? FALLBACK_BOX;
       const midBox = aboutImgRect
         ? {
@@ -92,32 +100,76 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
           }
         : startBox;
       const endBox = techImgRect ?? midBox;
+      const servicesBox = servicesImgRect ?? endBox;
 
       const firstLegProgress = aboutStop > heroMoveStart ? clamp((scrollY - heroMoveStart) / (aboutStop - heroMoveStart)) : 1;
-      const secondLegProgress = clamp((scrollY - aboutMoveStart) / (end - aboutMoveStart));
+      const secondLegProgress = clamp((scrollY - aboutMoveStart) / (techStop - aboutMoveStart));
+      const thirdLegProgress = clamp((scrollY - servicesMoveStart) / (servicesStop - servicesMoveStart));
 
-      const isHeroToAbout = scrollY <= aboutStop;
-      const isHoldingAbout = scrollY > aboutStop && scrollY <= aboutMoveStart;
-      setIsDockedAbout(isHoldingAbout);
-      document.documentElement.style.setProperty(
-        '--about-avatar-opacity',
-        isHoldingAbout ? '1' : '0',
-      );
-      document.documentElement.style.setProperty(
-        '--tech-avatar-opacity',
-        nextProgress >= 0.985 ? '1' : '0',
-      );
+      const isHeroToAbout = scrollY >= heroMoveStart && scrollY < aboutStop;
+      const isHoldingAbout = scrollY >= aboutStop && scrollY < aboutMoveStart;
+      const isAboutToTech = scrollY >= aboutMoveStart && scrollY < techStop;
+      const isHoldingTech = scrollY >= techStop && scrollY < servicesMoveStart;
+      const isTechToServices = scrollY >= servicesMoveStart && scrollY < servicesStop;
+      const isHoldingServices = scrollY >= servicesStop;
 
-      const fromBox = isHeroToAbout ? startBox : midBox;
-      const toBox = isHeroToAbout || isHoldingAbout ? midBox : endBox;
-      const legProgress = isHeroToAbout ? firstLegProgress : isHoldingAbout ? 1 : secondLegProgress;
+      document.documentElement.style.setProperty('--about-avatar-opacity', isHoldingAbout ? '1' : '0');
+      document.documentElement.style.setProperty('--tech-avatar-opacity', isHoldingTech ? '1' : '0');
+      document.documentElement.style.setProperty('--services-avatar-opacity', isHoldingServices ? '1' : '0');
 
-      setBox({
-        left: lerp(fromBox.left, toBox.left, legProgress),
-        top: lerp(fromBox.top, toBox.top, legProgress),
-        width: lerp(fromBox.width, toBox.width, legProgress),
-        height: lerp(fromBox.height, toBox.height, legProgress),
-      });
+      if (isHeroToAbout) {
+        setBox({
+          left: lerp(startBox.left, midBox.left, firstLegProgress),
+          top: lerp(startBox.top, midBox.top, firstLegProgress),
+          width: lerp(startBox.width, midBox.width, firstLegProgress),
+          height: lerp(startBox.height, midBox.height, firstLegProgress),
+        });
+        setLayerOpacity(1);
+        setPoseOpacity({
+          standing: 1 - clamp((firstLegProgress - 0.2) / 0.45),
+          laptop: clamp((firstLegProgress - 0.28) / 0.45),
+          tech: 0,
+          desk: 0,
+        });
+        return;
+      }
+
+      if (isAboutToTech) {
+        setBox({
+          left: lerp(midBox.left, endBox.left, secondLegProgress),
+          top: lerp(midBox.top, endBox.top, secondLegProgress),
+          width: lerp(midBox.width, endBox.width, secondLegProgress),
+          height: lerp(midBox.height, endBox.height, secondLegProgress),
+        });
+        setLayerOpacity(1);
+        setPoseOpacity({
+          standing: 0,
+          laptop: 1 - clamp((secondLegProgress - 0.22) / 0.42),
+          tech: clamp((secondLegProgress - 0.3) / 0.42),
+          desk: 0,
+        });
+        return;
+      }
+
+      if (isTechToServices) {
+        setBox({
+          left: lerp(endBox.left, servicesBox.left, thirdLegProgress),
+          top: lerp(endBox.top, servicesBox.top, thirdLegProgress),
+          width: lerp(endBox.width, servicesBox.width, thirdLegProgress),
+          height: lerp(endBox.height, servicesBox.height, thirdLegProgress),
+        });
+        setLayerOpacity(1);
+        setPoseOpacity({
+          standing: 0,
+          laptop: 0,
+          tech: 1 - clamp((thirdLegProgress - 0.2) / 0.45),
+          desk: clamp((thirdLegProgress - 0.32) / 0.42),
+        });
+        return;
+      }
+
+      setLayerOpacity(0);
+      setPoseOpacity({ standing: 0, laptop: 0, tech: 0, desk: 0 });
     };
 
     const onScroll = () => {
@@ -135,19 +187,10 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
       window.removeEventListener('resize', onScroll);
       document.documentElement.style.removeProperty('--about-avatar-opacity');
       document.documentElement.style.removeProperty('--tech-avatar-opacity');
+      document.documentElement.style.removeProperty('--services-avatar-opacity');
       document.documentElement.style.removeProperty('--hero-avatar-opacity');
     };
   }, [wrapperRef]);
-
-  const clamp = (value: number) => Math.min(1, Math.max(0, value));
-  const fade = (from: number, to: number) => clamp((progress - from) / (to - from));
-  const standingOpacity = progress <= 0.985 ? 1 - fade(0.08, 0.24) : 0;
-  const sittingOpacity =
-    progress <= 0.985
-      ? Math.min(fade(0.16, 0.34), 1 - fade(techTransitionStart, techTransitionStart + 0.18))
-      : 0;
-  const techOpacity = progress <= 0.985 ? fade(techTransitionStart + 0.04, techTransitionStart + 0.24) : 0;
-  const layerOpacity = progress > 0.002 && progress < 0.985 && !isDockedAbout ? 1 : 0;
 
   return (
     <div
@@ -168,7 +211,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
           alt="Shaheer"
           decoding="async"
           fetchPriority="high"
-          style={{ opacity: standingOpacity }}
+          style={{ opacity: poseOpacity.standing }}
           className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
         />
 
@@ -177,7 +220,7 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
           alt=""
           aria-hidden
           decoding="async"
-          style={{ opacity: sittingOpacity }}
+          style={{ opacity: poseOpacity.laptop }}
           className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
         />
 
@@ -186,7 +229,16 @@ export default function TravelingAvatar({ wrapperRef }: TravelingAvatarProps) {
           alt=""
           aria-hidden
           decoding="async"
-          style={{ opacity: techOpacity }}
+          style={{ opacity: poseOpacity.tech }}
+          className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
+        />
+
+        <img
+          src={deskPose}
+          alt=""
+          aria-hidden
+          decoding="async"
+          style={{ opacity: poseOpacity.desk }}
           className="avatar-crisp absolute inset-0 h-full w-full object-contain object-center"
         />
       </div>

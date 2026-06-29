@@ -79,9 +79,11 @@ export default function ServicesPortfolio() {
             <div className="absolute bottom-0 right-6 h-[250px] w-[340px] rounded-2xl border border-white/8 bg-dark-800/35 backdrop-blur-sm" />
             <div className="absolute inset-x-0 bottom-10 h-px bg-gradient-to-r from-transparent via-accent/35 to-transparent" />
             <img
+              data-avatar-services-img
               src={avatarDesk}
               alt="Shaheer working at a desk"
-              className="avatar-crisp pointer-events-none absolute -bottom-3 -right-16 z-10 w-[470px] max-w-none drop-shadow-[0_34px_64px_rgba(0,0,0,0.52)] xl:w-[520px]"
+              style={{ opacity: 'var(--services-avatar-opacity, 0)' }}
+              className="avatar-crisp pointer-events-none absolute -bottom-3 -right-16 z-10 w-[470px] max-w-none drop-shadow-[0_34px_64px_rgba(0,0,0,0.52)] transition-opacity duration-200 xl:w-[520px]"
             />
           </div>
         </motion.div>

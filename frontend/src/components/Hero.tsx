@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { Mouse, ArrowUpRight } from 'lucide-react';
 import heroPortrait from '../assets/images/hero-designer-coder-full-effect.png';
 
 export default function Hero() {
@@ -10,6 +10,7 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={sectionRef}
       className="relative isolate flex h-screen flex-col overflow-hidden bg-[#050608] px-6 pt-20 text-white"
     >
@@ -50,7 +51,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.14 }}
-              className="z-20 mx-auto flex h-[min(70vh,760px)] min-h-[430px] w-[min(78vw,780px)] items-end justify-center md:h-[min(78vh,840px)] md:min-h-[520px] [grid-area:1/1]"
+              className="z-30 mx-auto flex h-[min(70vh,760px)] min-h-[430px] w-[min(78vw,780px)] items-end justify-center md:h-[min(78vh,840px)] md:min-h-[520px] [grid-area:1/1]"
             >
               <div
                 data-avatar-hero-stage
@@ -83,11 +84,15 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.1 }}
-              className="pointer-events-none z-50 grid grid-cols-1 select-none gap-y-5 self-center [grid-area:1/1] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-y-3"
+              className="pointer-events-none z-20 grid h-full select-none [grid-area:1/1]"
+              style={{
+                gridTemplateRows:
+                  'minmax(1rem,0.58fr) auto clamp(7.5rem,16vh,11rem) auto minmax(1rem,0.52fr)',
+              }}
             >
-              <h1 className="contents">
+              <h1 className="row-start-2">
                 <span
-                  className="block pl-[max(1rem,3.6vw)] text-[clamp(3.6rem,17vw,6.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(3.8rem,9.2vw,10.4rem)] lg:[grid-column:1] lg:[grid-row:1]"
+                  className="block whitespace-nowrap pl-[max(1rem,3.6vw)] text-[clamp(3.4rem,15vw,6rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(4.2rem,8vw,9.2rem)]"
                   style={{
                     textShadow:
                       '0 1px 0 rgba(241,245,249,0.95), 0 2px 0 rgba(203,213,225,0.9), 0 3px 0 rgba(148,163,184,0.74), 0 5px 0 rgba(71,85,105,0.68), 0 18px 34px rgba(0,0,0,0.56)',
@@ -95,8 +100,22 @@ export default function Hero() {
                 >
                   Full stack
                 </span>
+              </h1>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.12 }}
+              className="pointer-events-none z-50 grid h-full select-none [grid-area:1/1]"
+              style={{
+                gridTemplateRows:
+                  'minmax(1rem,0.58fr) auto clamp(7.5rem,16vh,11rem) auto minmax(1rem,0.52fr)',
+              }}
+            >
+              <h1 className="row-start-4 translate-y-3 lg:translate-y-5">
                 <span
-                  className="block pr-[max(1rem,2.8vw)] text-right text-[clamp(3.6rem,17vw,6.4rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(3.8rem,9.2vw,10.4rem)] lg:[grid-column:2] lg:[grid-row:2]"
+                  className="block whitespace-nowrap pr-[max(1rem,3.6vw)] text-right text-[clamp(3.4rem,15vw,6rem)] font-extrabold leading-[0.84] tracking-[-0.065em] text-white md:text-[clamp(4.2rem,7.8vw,9rem)]"
                   style={{
                     textShadow:
                       '0 1px 0 rgba(241,245,249,0.95), 0 2px 0 rgba(203,213,225,0.9), 0 3px 0 rgba(148,163,184,0.74), 0 5px 0 rgba(71,85,105,0.68), 0 18px 34px rgba(0,0,0,0.56)',
@@ -105,13 +124,20 @@ export default function Hero() {
                   Developer
                 </span>
               </h1>
+            </motion.div>
 
-              <div className="hidden max-w-[390px] self-end justify-self-end pr-[max(1rem,2.8vw)] text-right text-sm text-gray-400 lg:block [grid-column:2] [grid-row:1]">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.16 }}
+              className="pointer-events-none z-50 hidden h-full select-none [grid-area:1/1] lg:block"
+            >
+              <div className="absolute right-[max(1rem,3.6vw)] top-[50%] max-w-[390px] -translate-y-1/2 text-right text-sm text-gray-400 xl:top-[51%] 2xl:top-[50%]">
                 <p className="font-semibold italic text-gray-200">WordPress Plugins</p>
                 <p className="mt-1 leading-6">Checkout systems and marketplace extensions.</p>
               </div>
 
-              <div className="hidden max-w-[360px] self-center justify-self-start pl-[max(1rem,3.6vw)] text-sm text-gray-400 lg:block [grid-column:1] [grid-row:2]">
+              <div className="absolute left-[max(1rem,3.6vw)] top-[70%] max-w-[360px] -translate-y-1/2 text-sm text-gray-400 xl:top-[72%] 2xl:top-[70%]">
                 <p className="font-semibold italic text-gray-200">Shopify Apps</p>
                 <p className="mt-1 leading-6">Embedded apps, merchant workflows, and admin dashboards.</p>
               </div>
@@ -154,13 +180,16 @@ export default function Hero() {
 
       <motion.button
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1, duration: 0.6 }}
+        animate={{ opacity: 1, y: [0, -7, 0] }}
+        transition={{
+          opacity: { delay: 1.1, duration: 0.6 },
+          y: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' },
+        }}
         onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        className="absolute bottom-24 left-1/2 z-50 hidden h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] text-gray-400 backdrop-blur transition hover:border-accent/40 hover:text-white xl:flex"
+        className="absolute bottom-24 left-1/2 z-50 hidden h-12 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-blue-500/45 bg-blue-500/[0.08] text-blue-500 backdrop-blur transition hover:border-blue-400/70 hover:bg-blue-500/[0.14] xl:flex"
         aria-label="Scroll to about"
       >
-        <ArrowDown className="h-5 w-5" />
+        <Mouse className="h-5 w-5" />
       </motion.button>
     </section>
   );

@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  X,
 } from 'lucide-react';
 import { projects } from '../data/projects';
 import { getProjectImages } from '../data/projectImages';
@@ -18,11 +19,53 @@ export default function ProjectDetailPage() {
   const project = projects.find((item) => item.id === id);
   const images = project ? getProjectImages(project.id) : [];
   const [activeImage, setActiveImage] = useState(0);
+  const [modalImage, setModalImage] = useState<number | null>(null);
 
   const moveImage = (event: MouseEvent<HTMLButtonElement>, direction: 1 | -1) => {
     event.preventDefault();
+    event.stopPropagation();
     setActiveImage((current) => (current + direction + images.length) % images.length);
   };
+
+  const moveModalImage = (direction: 1 | -1) => {
+    setModalImage((current) => {
+      if (current === null || images.length < 1) {
+        return current;
+      }
+
+      return (current + direction + images.length) % images.length;
+    });
+  };
+
+  useEffect(() => {
+    if (modalImage === null) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setModalImage(null);
+      }
+
+      if (event.key === 'ArrowLeft') {
+        moveModalImage(-1);
+      }
+
+      if (event.key === 'ArrowRight') {
+        moveModalImage(1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [modalImage, images.length]);
 
   if (!project) {
     return (
@@ -36,10 +79,11 @@ export default function ProjectDetailPage() {
   }
 
   const activeScreenshot = images[activeImage];
+  const modalScreenshot = modalImage !== null ? images[modalImage] : null;
 
   return (
     <div className="min-h-screen bg-dark-900 text-white">
-      <section className="relative isolate overflow-hidden px-6 pb-16 pt-8">
+      <section className="relative isolate overflow-hidden px-6 pb-16 pt-28">
         <div className={`absolute inset-x-0 top-0 -z-10 h-[620px] bg-gradient-to-br ${project.gradient} opacity-25`} />
         <div className="absolute inset-x-0 top-0 -z-10 h-[620px] bg-gradient-to-b from-dark-900/30 via-dark-900/78 to-dark-900" />
         <div
@@ -57,7 +101,7 @@ export default function ProjectDetailPage() {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.35 }}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/#projects')}
             className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -108,7 +152,19 @@ export default function ProjectDetailPage() {
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className="relative overflow-hidden rounded-xl border border-white/10 bg-dark-900/80 p-3 shadow-[0_34px_120px_rgba(0,0,0,0.46)]"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-white">
+              <div
+                onClick={() => activeScreenshot && setModalImage(activeImage)}
+                onKeyDown={(event) => {
+                  if ((event.key === 'Enter' || event.key === ' ') && activeScreenshot) {
+                    event.preventDefault();
+                    setModalImage(activeImage);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                className="relative aspect-[16/10] w-full cursor-zoom-in overflow-hidden rounded-lg bg-white"
+                aria-label="Open project screenshot preview"
+              >
                 {activeScreenshot ? (
                   <AnimatePresence mode="wait">
                     <motion.img
@@ -215,7 +271,7 @@ export default function ProjectDetailPage() {
                       type="button"
                       onClick={() => {
                         setActiveImage(index);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setModalImage(index);
                       }}
                       className="group overflow-hidden rounded-xl border border-dark-500/70 bg-dark-800/50 text-left transition-all hover:-translate-y-1 hover:border-accent/35"
                     >
@@ -267,6 +323,73 @@ export default function ProjectDetailPage() {
           </aside>
         </div>
       </main>
+
+      <AnimatePresence>
+        {modalScreenshot && modalImage !== null && (
+          <motion.div
+            data-scroll-modal
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/88 px-4 py-6 backdrop-blur-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setModalImage(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setModalImage(null)}
+              className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition-colors hover:bg-white/16"
+              aria-label="Close screenshot preview"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            {images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    moveModalImage(-1);
+                  }}
+                  className="absolute left-5 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition-colors hover:bg-accent md:flex"
+                  aria-label="Previous screenshot"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    moveModalImage(1);
+                  }}
+                  className="absolute right-5 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/10 text-white transition-colors hover:bg-accent md:flex"
+                  aria-label="Next screenshot"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+
+            <motion.div
+              className="max-h-[88vh] w-full max-w-6xl"
+              initial={{ scale: 0.96, y: 12 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.96, y: 12 }}
+              transition={{ duration: 0.24, ease: 'easeOut' }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <img
+                src={modalScreenshot}
+                alt={`${project.title} screenshot ${modalImage + 1}`}
+                className="max-h-[82vh] w-full rounded-xl border border-white/10 bg-white object-contain shadow-[0_34px_120px_rgba(0,0,0,0.56)]"
+              />
+              <p className="mt-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
+                {project.title} - {modalImage + 1} / {images.length}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
