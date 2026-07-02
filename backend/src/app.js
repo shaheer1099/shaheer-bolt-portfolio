@@ -8,12 +8,15 @@ const { corsOptions } = require('./config/cors');
 
 const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
-const connectSources = [
-  "'self'",
-  ...(process.env.CORS_ORIGINS || '')
+const parseOriginList = (value) =>
+  (value || '')
     .split(',')
     .map((origin) => origin.trim().replace(/\/+$/, ''))
-    .filter(Boolean),
+    .filter(Boolean);
+const connectSources = [
+  "'self'",
+  ...parseOriginList(process.env.CORS_ORIGINS),
+  ...parseOriginList(process.env.CSP_CONNECT_SOURCES),
 ];
 
 app.disable('x-powered-by');
@@ -21,8 +24,8 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        imgSrc: ["'self'", 'data:', 'https://upload.wikimedia.org'],
-        connectSrc: connectSources,
+        'img-src': ["'self'", 'data:', 'https://upload.wikimedia.org'],
+        'connect-src': connectSources,
       },
     },
   })
