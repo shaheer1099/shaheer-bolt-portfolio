@@ -38,7 +38,7 @@ export default function SmoothScroll() {
   const lockUntilRef = useRef(0);
 
   useEffect(() => {
-    if (location.pathname.startsWith('/projects/')) {
+    if (location.pathname === '/projects' || location.pathname.startsWith('/projects/')) {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       return;
     }

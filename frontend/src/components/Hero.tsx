@@ -84,7 +84,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.1 }}
-              className="pointer-events-none z-50 grid h-full select-none [grid-area:1/1]"
+              className="pointer-events-none z-20 grid h-full select-none [grid-area:1/1]"
               style={{
                 gridTemplateRows:
                   'minmax(1rem,0.58fr) auto clamp(7.5rem,16vh,11rem) auto minmax(1rem,0.52fr)',

@@ -1,6 +1,6 @@
-import { useState, FormEvent } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Send } from 'lucide-react';
+import { useEffect, useState, FormEvent } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertCircle, ArrowUpRight, CheckCircle2, Send, X } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 const projectTypes = [
@@ -18,47 +18,74 @@ const contactLinks = [
   { label: 'Upwork', value: 'Freelance profile', href: 'https://www.upwork.com/freelancers/shaheera65' },
 ];
 
+const contactApiUrl = import.meta.env.VITE_CONTACT_API_URL || 'http://localhost:5000/api/contact';
+const contactRouteToken = import.meta.env.VITE_CONTACT_ROUTE_TOKEN || '';
+
+type ToastState = {
+  type: 'success' | 'error';
+  message: string;
+} | null;
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     projectType: '',
     message: '',
+    website: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [toast, setToast] = useState<ToastState>(null);
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setToast(null), 5200);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('idle');
+    setToast(null);
 
     try {
-      const response = await fetch('https://formsubmit.co/ajax/shaheerasheikh00@gmail.com', {
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        projectType: formData.projectType.trim(),
+        message: formData.message.trim(),
+        website: formData.website.trim(),
+      };
+
+      if (!payload.name || !payload.email || !payload.projectType || !payload.message) {
+        throw new Error('All fields are required');
+      }
+
+      const response = await fetch(contactApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
+          ...(contactRouteToken ? { 'x-contact-token': contactRouteToken } : {}),
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          projectType: formData.projectType,
-          message: formData.message,
-          _subject: `New portfolio inquiry from ${formData.name}`,
-          _template: 'table',
-          _captcha: 'false',
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        throw new Error('Contact form submission failed');
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.message || 'Contact form submission failed');
       }
 
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', projectType: '', message: '' });
-    } catch {
-      setSubmitStatus('error');
+      const data = await response.json().catch(() => null);
+      setToast({ type: 'success', message: data?.message || 'Message sent. I will get back to you soon.' });
+      setFormData({ name: '', email: '', projectType: '', message: '', website: '' });
+    } catch (error) {
+      setToast({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Message could not be sent. Please try again.',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -66,6 +93,42 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative isolate overflow-hidden px-6 py-24">
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            role="status"
+            aria-live="polite"
+            initial={{ opacity: 0, y: -18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -18, scale: 0.98 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className={`fixed bottom-6 right-4 z-[90] flex w-[calc(100vw-2rem)] max-w-md items-start gap-3 rounded-xl border p-4 shadow-[0_24px_80px_rgba(0,0,0,0.46)] backdrop-blur-xl md:right-6 ${
+              toast.type === 'success'
+                ? 'border-green-400/25 bg-green-500/12 text-green-100'
+                : 'border-red-400/25 bg-red-500/12 text-red-100'
+            }`}
+          >
+            {toast.type === 'success' ? (
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-400" />
+            ) : (
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-400" />
+            )}
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-white">{toast.type === 'success' ? 'Message sent' : 'Message not sent'}</p>
+              <p className="mt-1 text-sm leading-relaxed text-gray-200">{toast.message}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setToast(null)}
+              className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+              aria-label="Dismiss notification"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="mx-auto max-w-7xl">
@@ -133,6 +196,17 @@ export default function Contact() {
           >
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent" />
             <form onSubmit={handleSubmit} className="space-y-5">
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-gray-500">Name</label>
@@ -194,17 +268,6 @@ export default function Contact() {
                 {!isSubmitting && <Send className="h-4 w-4" />}
               </button>
 
-              {submitStatus === 'success' && (
-                <p className="text-sm font-medium text-green-400">
-                  Message sent. I will get back to you soon.
-                </p>
-              )}
-
-              {submitStatus === 'error' && (
-                <p className="text-sm font-medium text-red-400">
-                  Message could not be sent. Please email me directly at shaheerasheikh00@gmail.com.
-                </p>
-              )}
             </form>
           </motion.div>
         </div>

@@ -88,13 +88,9 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="relative overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/78 p-6 md:p-8 backdrop-blur-xl"
+            className="relative flex min-h-[560px] overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/78 p-6 backdrop-blur-xl md:p-8 lg:h-[560px]"
           >
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-              <UpworkLogo />
-              <Quote className="h-10 w-10 text-accent/70" />
-            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
@@ -102,7 +98,12 @@ export default function Testimonials() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -18 }}
                 transition={{ duration: 0.3 }}
+                className="flex h-full w-full flex-col"
               >
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+                  <UpworkLogo />
+                  <Quote className="h-10 w-10 text-accent/70" />
+                </div>
                 <div className="mb-5 flex flex-wrap items-center gap-4 text-sm font-semibold text-gray-300">
                   <span className="flex items-center gap-1 text-[#ff5f1f]">
                     {[...Array(5)].map((_, index) => (
@@ -113,8 +114,10 @@ export default function Testimonials() {
                   <span className="h-5 w-px bg-white/18" />
                   <span>{active.period}</span>
                 </div>
-                <p className="max-w-4xl text-xl font-bold italic leading-relaxed text-white md:text-2xl">"{active.quote}"</p>
-                <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-dark-500/70 pt-6">
+                <p className="line-clamp-7 min-h-[210px] max-w-4xl text-xl font-bold italic leading-relaxed text-white md:min-h-[252px] md:text-2xl">
+                  "{active.quote}"
+                </p>
+                <div className="mt-auto flex flex-wrap items-end justify-between gap-6 border-t border-dark-500/70 pt-6">
                   <div>
                     <p className="text-lg font-bold text-white">{active.title}</p>
                     <p className="mt-1 text-sm text-gray-500">Endorsed by client</p>
