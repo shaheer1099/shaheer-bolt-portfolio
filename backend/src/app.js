@@ -8,6 +8,13 @@ const { corsOptions } = require('./config/cors');
 
 const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
+const connectSources = [
+  "'self'",
+  ...(process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
+];
 
 app.disable('x-powered-by');
 app.use(
@@ -15,6 +22,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         imgSrc: ["'self'", 'data:', 'https://upload.wikimedia.org'],
+        connectSrc: connectSources,
       },
     },
   })
