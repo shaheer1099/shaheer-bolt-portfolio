@@ -51,7 +51,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.14 }}
-              className="z-30 mx-auto flex h-[min(70vh,760px)] min-h-[430px] w-[min(78vw,780px)] items-end justify-center md:h-[min(78vh,840px)] md:min-h-[520px] [grid-area:1/1]"
+              className="z-30 -mx-6 flex h-[min(70vh,760px)] min-h-[430px] w-screen items-end justify-center md:mx-auto md:h-[min(78vh,840px)] md:min-h-[520px] md:w-[min(78vw,780px)] [grid-area:1/1]"
             >
               <div
                 data-avatar-hero-stage
@@ -74,9 +74,9 @@ export default function Hero() {
                 decoding="async"
                 fetchPriority="high"
                 initial={{ opacity: 0, y: 18, scale: 0.98 }}
-                animate={{ opacity: 0.48, y: 0, scale: 1 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.7, delay: 0.22 }}
-                className="avatar-crisp h-[min(580px,72vh)] w-auto max-w-none object-contain object-bottom md:hidden"
+                className="avatar-crisp w-screen max-w-none object-contain object-bottom md:hidden"
               />
             </motion.div>
 
@@ -84,7 +84,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 0.1 }}
-              className="pointer-events-none z-20 grid h-full select-none [grid-area:1/1]"
+              className="pointer-events-none z-50 grid h-full select-none [grid-area:1/1]"
               style={{
                 gridTemplateRows:
                   'minmax(1rem,0.58fr) auto clamp(7.5rem,16vh,11rem) auto minmax(1rem,0.52fr)',
