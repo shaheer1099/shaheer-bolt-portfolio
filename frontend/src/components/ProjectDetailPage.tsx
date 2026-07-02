@@ -166,15 +166,15 @@ export default function ProjectDetailPage() {
                 aria-label="Open project screenshot preview"
               >
                 {activeScreenshot ? (
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence initial={false}>
                     <motion.img
                       key={activeScreenshot}
                       src={activeScreenshot}
                       alt={`${project.title} screenshot ${activeImage + 1}`}
-                      initial={{ opacity: 0, scale: 1.02 }}
+                      initial={{ opacity: 0, scale: 1.012 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.28, ease: 'easeOut' }}
+                      exit={{ opacity: 0, scale: 0.996 }}
+                      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                       className="absolute inset-0 h-full w-full object-contain"
                     />
                   </AnimatePresence>

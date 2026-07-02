@@ -9,6 +9,7 @@ import Experience from './components/Experience';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectDetailPage from './components/ProjectDetailPage';
+import AllProjectsPage from './components/AllProjectsPage';
 import CustomCursor from './components/CustomCursor';
 import SmoothScroll from './components/SmoothScroll';
 
@@ -38,6 +39,7 @@ function App() {
       <SmoothScroll />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<AllProjectsPage />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
       </Routes>
     </BrowserRouter>

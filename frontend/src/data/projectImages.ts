@@ -8,10 +8,13 @@ const projectImageFolders: Record<string, string> = {
   'noon-reviews-importer': 'Noon Reviews',
   'my-outfit-builder': 'Outfit builder',
   'peakflow-progress-tracker': 'Peak flow',
+  'buddy-cart': 'Shared Cart',
+  'tekmetric-inventory-integration': 'tekmetric',
   'extend-b2b-aio': 'booking AIO',
   'extend-b2b-product-tables': 'Product table',
   'extend-booking-filters': 'Extend - Booking Filters for WooCommerce',
   'extend-subscriptions': 'Extend - Subscriptions Add-On for WooCommerce',
+  'bigmpos-advanced-analytics': 'advance analytic bigmpos',
   'cyberize-it': 'Cyberize it',
 };
 

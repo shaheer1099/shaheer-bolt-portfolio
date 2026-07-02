@@ -1,36 +1,62 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
 
 const stories = [
   {
-    title: 'Marketplace plugin delivery',
-    role: 'WooCommerce Product Team',
+    title: 'Looking for shopify App developer to completely develop app using latest technology',
+    period: 'Feb 23, 2026 - Mar 5, 2026',
+    rating: '5.0',
     quote:
-      'Built marketplace-ready extensions with the structure, documentation, and stability needed for real merchant installs.',
-    impact: 'Published product workflow',
+      'Shaheer is very professional and good communicator. I will definitely hire him again for future work',
+    endorsements: ['Committed to Quality', 'Solution Oriented', 'Clear Communicator', 'Professional'],
+    impact: 'Shopify app delivery',
   },
   {
-    title: 'Shopify app launch support',
-    role: 'Ecommerce Founder',
+    title: 'Quick WordPress Fixes for Event Manager Plugin',
+    period: 'Mar 10, 2024 - Mar 16, 2024',
+    rating: '5.0',
     quote:
-      'Moved from an idea to a working app experience with clear technical decisions and focused implementation cycles.',
-    impact: 'Storefront-ready app UX',
+      'It was a pleasure to work with Shaheer. He understood the error and fixed it within the given time. Will definitely hire him again.',
+    endorsements: ['Collaborative', 'Solution Oriented'],
+    impact: 'Fast WordPress fix',
   },
   {
-    title: 'Custom platform build',
-    role: 'SaaS Operator',
+    title: 'WordPress Plugin Customization',
+    period: 'Mar 8, 2024 - Mar 11, 2024',
+    rating: '5.0',
     quote:
-      'Connected product, admin, payments, and operational workflows into a maintainable platform instead of scattered tools.',
-    impact: 'End-to-end system delivery',
+      'Working with Shaheer on my project was a great experience. Despite being new to Upwork, his professionalism and skill were impressive. He communicated clearly and was very responsive, delivering high-quality work on time. I highly recommend Shaheer for anyone looking for a skilled and dedicated freelancer. Looking forward to our next project together.',
+    endorsements: ['Professional', 'Clear Communicator', 'Reliable', 'Committed to Quality'],
+    impact: 'Plugin customization',
   },
 ];
+
+function UpworkLogo() {
+  return (
+    <div className="inline-flex items-center rounded-full border border-[#14a800]/25 bg-[#14a800]/10 px-3 py-1.5">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Upwork_Logo.svg/250px-Upwork_Logo.svg.png"
+        alt="Upwork"
+        className="h-5 w-auto"
+      />
+    </div>
+  );
+}
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
   const active = stories[current];
   const prev = () => setCurrent((index) => (index - 1 + stories.length) % stories.length);
   const next = () => setCurrent((index) => (index + 1) % stories.length);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrent((index) => (index + 1) % stories.length);
+    }, 5500);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <section id="testimonials" className="relative isolate overflow-hidden px-6 py-24">
@@ -47,11 +73,11 @@ export default function Testimonials() {
           <div>
             <span className="section-eyebrow mb-4 block text-left">Client Stories</span>
             <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
-              Built For Real Product Pressure
+              Upwork Clients, Real Feedback
             </h2>
             <div className="section-divider my-5" />
             <p className="max-w-2xl text-sm leading-relaxed text-gray-400 md:text-base">
-              A portfolio should show more than screens. These stories focus on the kind of delivery outcomes clients usually need: shipping, stability, and maintainable growth.
+              Recent client reviews highlighting communication, reliability, and practical delivery across Shopify and WordPress work.
             </p>
           </div>
         </motion.div>
@@ -65,7 +91,10 @@ export default function Testimonials() {
             className="relative overflow-hidden rounded-xl border border-dark-500/70 bg-dark-900/78 p-6 md:p-8 backdrop-blur-xl"
           >
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <Quote className="mb-8 h-10 w-10 text-accent/70" />
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+              <UpworkLogo />
+              <Quote className="h-10 w-10 text-accent/70" />
+            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
@@ -74,11 +103,28 @@ export default function Testimonials() {
                 exit={{ opacity: 0, y: -18 }}
                 transition={{ duration: 0.3 }}
               >
-                <p className="max-w-4xl text-2xl font-bold leading-relaxed text-white md:text-3xl">{active.quote}</p>
+                <div className="mb-5 flex flex-wrap items-center gap-4 text-sm font-semibold text-gray-300">
+                  <span className="flex items-center gap-1 text-[#ff5f1f]">
+                    {[...Array(5)].map((_, index) => (
+                      <Star key={index} className="h-4 w-4 fill-current" />
+                    ))}
+                  </span>
+                  <span className="text-lg font-bold text-white">{active.rating}</span>
+                  <span className="h-5 w-px bg-white/18" />
+                  <span>{active.period}</span>
+                </div>
+                <p className="max-w-4xl text-xl font-bold italic leading-relaxed text-white md:text-2xl">"{active.quote}"</p>
                 <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-dark-500/70 pt-6">
                   <div>
                     <p className="text-lg font-bold text-white">{active.title}</p>
-                    <p className="mt-1 text-sm text-gray-500">{active.role}</p>
+                    <p className="mt-1 text-sm text-gray-500">Endorsed by client</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {active.endorsements.map((endorsement) => (
+                        <span key={endorsement} className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-gray-200">
+                          {endorsement}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-accent">
                     {active.impact}
@@ -102,7 +148,7 @@ export default function Testimonials() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-sm font-bold text-white">{story.title}</p>
-                    <p className="mt-1 text-xs text-gray-500">{story.role}</p>
+                    <p className="mt-1 text-xs text-gray-500">{story.period}</p>
                   </div>
                   <ArrowUpRight className="h-4 w-4 shrink-0 text-gray-600" />
                 </div>

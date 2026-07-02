@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Project, projects } from '../data/projects';
 import { getProjectImages } from '../data/projectImages';
 
@@ -27,15 +27,15 @@ function EditorialCover({ project, compact = false }: { project: Project; compac
   if (currentImage) {
     return (
       <div className={`relative overflow-hidden rounded-lg border border-white/10 bg-white ${compact ? 'aspect-[16/10]' : 'aspect-[16/10]'}`}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.img
             key={currentImage}
             src={currentImage}
             alt={`${project.title} screenshot ${activeImage + 1}`}
-            initial={{ opacity: 0, scale: 1.03 }}
+            initial={{ opacity: 0, scale: 1.015 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
+            exit={{ opacity: 0, scale: 0.995 }}
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 h-full w-full object-contain"
           />
         </AnimatePresence>
@@ -198,7 +198,7 @@ export default function Projects() {
   const [activeTab, setActiveTab] = useState<Tab>('shopify');
   const filtered = projects.filter((project) => project.tab === activeTab);
   const featured = filtered[0];
-  const supporting = filtered.slice(1);
+  const supporting = filtered.slice(1, 4);
 
   if (!featured) return null;
 
@@ -212,7 +212,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="mx-auto mb-10 max-w-3xl text-center"
+          className="mx-auto mb-10 max-w-4xl text-center"
         >
           <span className="section-eyebrow mb-4 block">Projects</span>
           <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
@@ -224,7 +224,7 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex flex-col items-center justify-between gap-4 rounded-xl border border-dark-500/70 bg-dark-900/55 p-3 shadow-card backdrop-blur-xl md:flex-row">
           <div className="flex gap-1 rounded-xl border border-dark-500/70 bg-dark-900/75 p-1 shadow-card backdrop-blur-xl">
             {tabs.map((tab) => (
               <button
@@ -240,6 +240,15 @@ export default function Projects() {
               </button>
             ))}
           </div>
+          <Link
+            to="/projects"
+            className="group inline-flex w-full items-center justify-center gap-3 rounded-lg bg-white px-5 py-3 text-sm font-bold text-dark-900 shadow-[0_18px_44px_rgba(255,255,255,0.12)] transition-all hover:-translate-y-0.5 hover:bg-accent hover:text-white md:w-auto"
+          >
+            View All Projects
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-dark-900 text-white transition-colors group-hover:bg-white group-hover:text-accent">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
         </div>
 
         <AnimatePresence mode="wait">
@@ -259,6 +268,7 @@ export default function Projects() {
                 ))}
               </div>
             )}
+
           </motion.div>
         </AnimatePresence>
       </div>
