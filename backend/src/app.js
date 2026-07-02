@@ -10,7 +10,15 @@ const app = express();
 const publicPath = path.join(__dirname, '..', 'public');
 
 app.disable('x-powered-by');
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        imgSrc: ["'self'", 'data:', 'https://upload.wikimedia.org'],
+      },
+    },
+  })
+);
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: false, limit: '16kb' }));
